@@ -110,20 +110,25 @@ export default function HomeScreen() {
     <>
       <Header currentDate={currentDate} />
       <CalendarContainer
-        theme={CALENDAR_THEME.dark}
+        theme={CALENDAR_THEME.light}
         numberOfDays={7}
         firstDay={1}
         calendarWidth={calendarWidth}
-        allowDragToEdit
-        allowDragToCreate
         initialLocales={initialLocales}
         locale="en"
         minRegularEventMinutes={5}
         // hideWeekDays={[6, 7]}
+        showWeekNumber={true}
+        scrollToNow
         minDate={MIN_DATE}
         maxDate={MAX_DATE}
         initialDate={INITIAL_DATE}
         timeZone="Europe/Budapest"
+        allowDragToEdit
+        allowDragToCreate
+        useAllDayEvent
+        rightEdgeSpacing={4}
+        overlapEventsSpacing={1}
         events={[
           {
             id: "event_3xx",
@@ -137,6 +142,9 @@ export default function HomeScreen() {
             color: "#5428F2",
           },
         ]}
+        onDragCreateEventEnd={(event) => {
+          console.log("onDragCreateEventEnd", event);
+        }}
       >
         <CalendarHeader />
         <CalendarBody />
