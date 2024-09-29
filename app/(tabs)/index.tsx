@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import {
   CalendarBody,
   CalendarContainer,
@@ -103,15 +104,26 @@ export default function HomeScreen() {
   const [calendarWidth, setCalendarWidth] = useState(
     Dimensions.get("window").width
   );
+  const currentDate = useSharedValue(INITIAL_DATE);
 
   return (
     <>
+      <Header currentDate={currentDate} />
       <CalendarContainer
         theme={CALENDAR_THEME.dark}
+        numberOfDays={7}
         firstDay={1}
         calendarWidth={calendarWidth}
         allowDragToEdit
         allowDragToCreate
+        initialLocales={initialLocales}
+        locale="en"
+        minRegularEventMinutes={5}
+        // hideWeekDays={[6, 7]}
+        minDate={MIN_DATE}
+        maxDate={MAX_DATE}
+        initialDate={INITIAL_DATE}
+        timeZone="Europe/Budapest"
         events={[
           {
             id: "event_3xx",
@@ -126,6 +138,7 @@ export default function HomeScreen() {
           },
         ]}
       >
+        <CalendarHeader />
         <CalendarBody />
       </CalendarContainer>
     </>
