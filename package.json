@@ -19,6 +19,7 @@
     "@howljs/calendar-kit": "^2.0.2",
     "@react-navigation/native": "^6.0.2",
     "@shopify/flash-list": "^1.7.1",
+    "dayjs": "^1.11.13",
     "expo": "~51.0.28",
     "expo-calendar": "~13.0.5",
     "expo-constants": "~16.0.2",

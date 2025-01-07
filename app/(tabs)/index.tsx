@@ -8,6 +8,7 @@ import {
   SelectedEventType,
   type CalendarKitHandle,
   type LocaleConfigsProps,
+  type OnCreateEventResponse,
 } from "@howljs/calendar-kit";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, {
@@ -23,9 +24,13 @@ import {
   View,
   useColorScheme,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import dayjs from "dayjs";
+
+const generateId = () => (Math.floor(Math.random() * 10000) + 1).toString();
 
 const MIN_DATE = new Date(
   new Date().getFullYear() - 2,
@@ -105,18 +110,49 @@ export default function HomeScreen() {
     Dimensions.get("window").width
   );
   const currentDate = useSharedValue(INITIAL_DATE);
+  const [events, setEvents] = useState<EventItem[]>([]);
+
+  // const handleLongPressBackground = useCallback((event: DateOrDateTime) => {
+  //   console.log("🚀 ~ handleLongPressBackground ~ event:", event);
+  //   const newEvent = {
+  //     id: generateId(),
+  //     start: event,
+  //     end: {
+  //       dateTime: dayjs(event.dateTime).add(30, "minute").toISOString(),
+  //     },
+  //     title: "New Event",
+  //     color: randomColor(),
+  //   };
+
+  //   setEvents((prevEvents) => [...prevEvents, newEvent]);
+  // }, []);
+
+  const handleDragCreateEventEnd = useCallback(
+    (event: OnCreateEventResponse) => {
+      const newEvent: EventItem = {
+        ...event,
+        id: generateId(),
+        title: "New Event",
+        color: randomColor(),
+      };
+
+      setEvents((prevEvents) => [...prevEvents, newEvent]);
+    },
+    []
+  );
 
   return (
     <>
       <Header currentDate={currentDate} />
       <CalendarContainer
         theme={CALENDAR_THEME.light}
-        numberOfDays={7}
+        numberOfDays={5}
         firstDay={1}
         calendarWidth={calendarWidth}
         initialLocales={initialLocales}
         locale="en"
-        minRegularEventMinutes={5}
+        minRegularEventMinutes={30}
+        initialTimeIntervalHeight={80}
         // hideWeekDays={[6, 7]}
         showWeekNumber={true}
         scrollToNow
@@ -129,22 +165,9 @@ export default function HomeScreen() {
         useAllDayEvent
         rightEdgeSpacing={4}
         overlapEventsSpacing={1}
-        events={[
-          {
-            id: "event_3xx",
-            start: {
-              dateTime: "2024-09-28T05:00:00.000",
-            },
-            end: {
-              dateTime: "2024-09-28T06:00:00.000",
-            },
-            title: "Event 3xx",
-            color: "#5428F2",
-          },
-        ]}
-        onDragCreateEventEnd={(event) => {
-          console.log("onDragCreateEventEnd", event);
-        }}
+        events={events}
+        // onLongPressBackground={handleLongPressBackground}
+        onDragCreateEventEnd={handleDragCreateEventEnd}
       >
         <CalendarHeader />
         <CalendarBody />
