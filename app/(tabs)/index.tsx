@@ -1,209 +1,74 @@
-import Header from "@/components/Header";
-import {
-  CalendarBody,
-  CalendarContainer,
-  CalendarHeader,
-  DateOrDateTime,
-  EventItem,
-  SelectedEventType,
-  type CalendarKitHandle,
-  type LocaleConfigsProps,
-  type OnCreateEventResponse,
-} from "@howljs/calendar-kit";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import {
-  Dimensions,
-  StyleSheet,
-  View,
-  useColorScheme,
-  SafeAreaView,
-  Alert,
-} from "react-native";
-import { useSharedValue } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import dayjs from "dayjs";
+import { Image, StyleSheet, Platform } from "react-native";
 
-const generateId = () => (Math.floor(Math.random() * 10000) + 1).toString();
-
-const MIN_DATE = new Date(
-  new Date().getFullYear() - 2,
-  new Date().getMonth(),
-  new Date().getDate()
-).toISOString();
-
-const MAX_DATE = new Date(
-  new Date().getFullYear() + 2,
-  new Date().getMonth(),
-  new Date().getDate()
-).toISOString();
-
-const INITIAL_DATE = new Date(
-  new Date().getFullYear(),
-  new Date().getMonth(),
-  new Date().getDate()
-).toISOString();
-
-const CALENDAR_THEME = {
-  light: {
-    colors: {
-      primary: "#1a73e8",
-      onPrimary: "#fff",
-      background: "#fff",
-      onBackground: "#000",
-      border: "#dadce0",
-      text: "#000",
-      surface: "#ECECEC",
-    },
-  },
-  dark: {
-    colors: {
-      primary: "#4E98FA",
-      onPrimary: "#FFF",
-      background: "#1A1B21",
-      onBackground: "#FFF",
-      border: "#46464C",
-      text: "#FFF",
-      surface: "#545454",
-    },
-  },
-};
-
-const initialLocales: Record<string, Partial<LocaleConfigsProps>> = {
-  en: {
-    weekDayShort: "Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),
-    meridiem: { ante: "am", post: "pm" },
-  },
-  ja: {
-    weekDayShort: "日_月_火_水_木_金_土".split("_"),
-    meridiem: { ante: "午前", post: "午後" },
-  },
-  vi: {
-    weekDayShort: "CN_T2_T3_T4_T5_T6_T7".split("_"),
-    meridiem: { ante: "sa", post: "ch" },
-  },
-};
-
-const randomColor = () => {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
-
-const minDate = new Date(
-  new Date().getFullYear(),
-  new Date().getMonth() - 4,
-  new Date().getDate()
-);
+import { HelloWave } from "@/components/HelloWave";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 
 export default function HomeScreen() {
-  const [calendarWidth, setCalendarWidth] = useState(
-    Dimensions.get("window").width
-  );
-  const currentDate = useSharedValue(INITIAL_DATE);
-  const [events, setEvents] = useState<EventItem[]>([]);
-
-  // const handleLongPressBackground = useCallback((event: DateOrDateTime) => {
-  //   console.log("🚀 ~ handleLongPressBackground ~ event:", event);
-  //   const newEvent = {
-  //     id: generateId(),
-  //     start: event,
-  //     end: {
-  //       dateTime: dayjs(event.dateTime).add(30, "minute").toISOString(),
-  //     },
-  //     title: "New Event",
-  //     color: randomColor(),
-  //   };
-
-  //   setEvents((prevEvents) => [...prevEvents, newEvent]);
-  // }, []);
-
-  const handleDragCreateEventEnd = useCallback(
-    (event: OnCreateEventResponse) => {
-      const newEvent: EventItem = {
-        ...event,
-        id: generateId(),
-        title: "New Event",
-        color: randomColor(),
-      };
-
-      setEvents((prevEvents) => [...prevEvents, newEvent]);
-    },
-    []
-  );
-
   return (
-    <>
-      <Header currentDate={currentDate} />
-      <CalendarContainer
-        theme={CALENDAR_THEME.light}
-        numberOfDays={5}
-        firstDay={1}
-        calendarWidth={calendarWidth}
-        initialLocales={initialLocales}
-        locale="en"
-        minRegularEventMinutes={30}
-        initialTimeIntervalHeight={80}
-        // hideWeekDays={[6, 7]}
-        showWeekNumber={true}
-        scrollToNow
-        minDate={MIN_DATE}
-        maxDate={MAX_DATE}
-        initialDate={INITIAL_DATE}
-        timeZone="Europe/Budapest"
-        allowDragToEdit
-        allowDragToCreate
-        useAllDayEvent
-        rightEdgeSpacing={4}
-        overlapEventsSpacing={1}
-        events={events}
-        // onLongPressBackground={handleLongPressBackground}
-        onDragCreateEventEnd={handleDragCreateEventEnd}
-      >
-        <CalendarHeader />
-        <CalendarBody />
-      </CalendarContainer>
-    </>
+    <ParallaxScrollView
+      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
+      headerImage={
+        <Image
+          source={require("@/assets/images/partial-react-logo.png")}
+          style={styles.reactLogo}
+        />
+      }
+    >
+      <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title">Welcome!</ThemedText>
+        <HelloWave />
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
+        <ThemedText>
+          Edit{" "}
+          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
+          to see changes. Press{" "}
+          <ThemedText type="defaultSemiBold">
+            {Platform.select({ ios: "cmd + d", android: "cmd + m" })}
+          </ThemedText>{" "}
+          to open developer tools.
+        </ThemedText>
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
+        <ThemedText>
+          Tap the Explore tab to learn more about what's included in this
+          starter app.
+        </ThemedText>
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
+        <ThemedText>
+          When you're ready, run{" "}
+          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
+          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
+          directory. This will move the current{" "}
+          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
+          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
+        </ThemedText>
+      </ThemedView>
+    </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFF" },
-  footer: {
-    position: "absolute",
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  stepContainer: {
+    gap: 8,
+    marginBottom: 8,
+  },
+  reactLogo: {
+    height: 178,
+    width: 290,
     bottom: 0,
     left: 0,
-    right: 0,
-    backgroundColor: "#FFF",
-    height: 85,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: -2,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
-    flexDirection: "row",
-    justifyContent: "center",
+    position: "absolute",
   },
-  button: {
-    height: 45,
-    paddingHorizontal: 24,
-    backgroundColor: "#1973E7",
-    justifyContent: "center",
-    borderRadius: 24,
-    marginHorizontal: 8,
-    marginVertical: 8,
-  },
-  btnText: { fontSize: 16, color: "#FFF", fontWeight: "bold" },
 });

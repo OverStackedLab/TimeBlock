@@ -16,8 +16,9 @@ interface HeaderProps {
   onPressToday?: () => void;
 }
 
-const Header: FC<HeaderProps> = ({ currentDate, onPressToday }) => {
+const Header = ({ currentDate, onPressToday }: HeaderProps) => {
   const theme = useTheme();
+  const navigation = useNavigation();
   const { top: safeTop } = useSafeAreaInsets();
   const [title, setTitle] = useState("");
 
@@ -37,6 +38,10 @@ const Header: FC<HeaderProps> = ({ currentDate, onPressToday }) => {
     []
   );
 
+  const _onPressMenu = () => {
+    navigation.dispatch(DrawerActions.openDrawer());
+  };
+
   return (
     <View
       style={[
@@ -47,7 +52,7 @@ const Header: FC<HeaderProps> = ({ currentDate, onPressToday }) => {
       <TouchableOpacity
         activeOpacity={0.6}
         style={styles.menuBtn}
-        // onPress={_onPressMenu}
+        onPress={_onPressMenu}
       >
         <MaterialCommunityIcons
           name="menu"
