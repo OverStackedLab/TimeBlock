@@ -8,13 +8,13 @@ type TrippleColumnIconProps = {
 
 export default function TrippleColumnIcon({
   size = 27,
-  color = "#000",
+  color = "#f57c00",
 }: TrippleColumnIconProps) {
   return (
     <Svg
       width={size}
+      height={size}
       viewBox="0 0 39 31.5"
-      height="20"
       preserveAspectRatio="xMidYMid meet"
     >
       <Defs>
@@ -39,7 +39,7 @@ export default function TrippleColumnIcon({
       </Defs>
       <G clip-path="url(#103cd32e33)">
         <Path
-          fill="#f57c00"
+          fill={color}
           d="M 0.304688 0 L 11.746094 0 L 11.746094 31.023438 L 0.304688 31.023438 Z M 0.304688 0 "
           fill-opacity="1"
           fill-rule="nonzero"
@@ -47,7 +47,7 @@ export default function TrippleColumnIcon({
       </G>
       <G clip-path="url(#79bdff4806)">
         <Path
-          fill="#f57c00"
+          fill={color}
           d="M 13.777344 0 L 25.222656 0 L 25.222656 31.023438 L 13.777344 31.023438 Z M 13.777344 0 "
           fill-opacity="1"
           fill-rule="nonzero"
@@ -55,7 +55,7 @@ export default function TrippleColumnIcon({
       </G>
       <G clip-path="url(#651da5523f)">
         <Path
-          fill="#f57c00"
+          fill={color}
           d="M 27.4375 0 L 38.878906 0 L 38.878906 31.023438 L 27.4375 31.023438 Z M 27.4375 0 "
           fill-opacity="1"
           fill-rule="nonzero"
