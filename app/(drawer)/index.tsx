@@ -115,7 +115,7 @@ export default function HomeScreen() {
   );
   const currentDate = useSharedValue(INITIAL_DATE);
   const [events, setEvents] = useState<EventItem[]>([]);
-  const [numberOfDays, setNumberOfDays] = useState(5);
+  const [numberOfDays, setNumberOfDays] = useState(3);
 
   // const handleLongPressBackground = useCallback((event: DateOrDateTime) => {
   //   console.log("🚀 ~ handleLongPressBackground ~ event:", event);
@@ -149,7 +149,7 @@ export default function HomeScreen() {
   return (
     <>
       <Header currentDate={currentDate} />
-      <View style={styles.daySelector}>
+      {/* <View style={styles.daySelector}>
         {DAY_OPTIONS.map((days) => (
           <Pressable
             key={days}
@@ -169,7 +169,7 @@ export default function HomeScreen() {
             </Text>
           </Pressable>
         ))}
-      </View>
+      </View> */}
       <CalendarContainer
         theme={CALENDAR_THEME.light}
         numberOfDays={numberOfDays}
@@ -179,7 +179,6 @@ export default function HomeScreen() {
         locale="en"
         minRegularEventMinutes={30}
         initialTimeIntervalHeight={80}
-        // hideWeekDays={[6, 7]}
         showWeekNumber={true}
         scrollToNow
         minDate={MIN_DATE}

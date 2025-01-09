@@ -1,6 +1,6 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
-import CustomDrawerContent from "@/components/CustomDrawerContent";
+import DrawerContent from "@/components/DrawerContent";
 
 export default function DrawerLayout() {
   return (
@@ -9,7 +9,7 @@ export default function DrawerLayout() {
         screenOptions={{
           headerShown: false,
         }}
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
+        drawerContent={(props) => <DrawerContent {...props} />}
       >
         <Drawer.Screen
           name="index"
