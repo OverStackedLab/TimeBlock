@@ -31,6 +31,7 @@ import {
 import { useSharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import dayjs from "dayjs";
+import { useAppSelector } from "@/hooks/useAppSelector";
 
 const generateId = () => (Math.floor(Math.random() * 10000) + 1).toString();
 
@@ -115,7 +116,7 @@ export default function HomeScreen() {
   );
   const currentDate = useSharedValue(INITIAL_DATE);
   const [events, setEvents] = useState<EventItem[]>([]);
-  const [numberOfDays, setNumberOfDays] = useState(3);
+  const numberOfDays = useAppSelector((state) => state.calendar.numberOfDays);
 
   // const handleLongPressBackground = useCallback((event: DateOrDateTime) => {
   //   console.log("🚀 ~ handleLongPressBackground ~ event:", event);

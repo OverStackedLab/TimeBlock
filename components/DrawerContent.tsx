@@ -1,25 +1,38 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
-import { useNavigation } from "expo-router";
 import TrippleColumnIcon from "./icons/TrippleColumnIcon";
 import DoubleColumnIcon from "./icons/DoubleColumnIcon";
 import SingleColumnIcon from "./icons/SingleColumnIcon";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { setNumberOfDays } from "@/services/calendarSlice";
 
 const DAY_OPTIONS = [1, 2, 3];
 
 export default function CustomDrawerContent(props: any) {
+  const dispatch = useAppDispatch();
+
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.container}>
         <Text style={styles.title}>Calendar Settings</Text>
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>View Options</Text>
+            <Text style={styles.sectionTitle}>Options</Text>
           </View>
           <View style={styles.optionsContainer}>
             {DAY_OPTIONS.map((days) => (
-              <Pressable key={days} style={[styles.option]}>
+              <TouchableOpacity
+                key={days}
+                style={[styles.option]}
+                onPress={() => dispatch(setNumberOfDays(days))}
+              >
                 {days === 1 ? (
                   <SingleColumnIcon size={20} />
                 ) : days === 2 ? (
@@ -28,7 +41,7 @@ export default function CustomDrawerContent(props: any) {
                   <TrippleColumnIcon size={20} />
                 )}
                 <Text style={styles.optionText}>{`${days} Day`}</Text>
-              </Pressable>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
