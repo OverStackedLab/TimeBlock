@@ -1,8 +1,9 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { DrawerActions } from "@react-navigation/native";
-import { useNavigation } from "expo-router";
-import React, { useState, type FC } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { DrawerActions } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "expo-router";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   runOnJS,
   useAnimatedReaction,
@@ -46,9 +47,13 @@ const Header = ({ currentDate, onPressToday }: HeaderProps) => {
     <View
       style={[
         styles.header,
-        { paddingTop: safeTop + 16, backgroundColor: theme.colors.card },
+        {
+          paddingTop: safeTop + 16,
+          backgroundColor: theme.colors.brandPrimary,
+        },
       ]}
     >
+      <StatusBar style="light" />
       <TouchableOpacity
         activeOpacity={0.6}
         style={styles.menuBtn}
@@ -57,11 +62,11 @@ const Header = ({ currentDate, onPressToday }: HeaderProps) => {
         <MaterialCommunityIcons
           name="menu"
           size={24}
-          color={theme.colors.text}
+          color={theme.colors.white}
         />
       </TouchableOpacity>
       <View style={styles.headerRightContent}>
-        <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
+        <Text style={[styles.headerTitle, { color: theme.colors.white }]}>
           {title}
         </Text>
         <TouchableOpacity
@@ -72,7 +77,7 @@ const Header = ({ currentDate, onPressToday }: HeaderProps) => {
           <MaterialCommunityIcons
             name="calendar"
             size={24}
-            color={theme.colors.text}
+            color={theme.colors.white}
           />
         </TouchableOpacity>
       </View>
