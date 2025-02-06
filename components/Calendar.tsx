@@ -1,11 +1,10 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import {
   CalendarBody,
   CalendarContainer,
   CalendarHeader,
   CalendarKitHandle,
-  DateOrDateTime,
   EventItem,
   OnCreateEventResponse,
 } from '@howljs/calendar-kit';
@@ -14,7 +13,8 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { addEvent } from '@/services/calendarSlice';
 import { useTheme } from '@react-navigation/native';
 import { MD3Colors } from 'react-native-paper';
-import dayjs from 'dayjs';
+import BottomSheet from '@gorhom/bottom-sheet';
+import EventBottomSheet from './EventBottomSheet';
 
 const generateId = () => (Math.floor(Math.random() * 10000) + 1).toString();
 
@@ -47,6 +47,10 @@ const CALENDAR_THEME = {
       text: MD3Colors.primary0,
       surface: '#ECECEC',
     },
+    nowIndicatorColor: MD3Colors.error50,
+    eventTitleStyle: {
+      color: MD3Colors.primary100,
+    },
   },
 };
 
@@ -64,6 +68,8 @@ export default function Calendar() {
   const [calendarWidth] = useState(Dimensions.get('window').width);
   const numberOfDays = useAppSelector(state => state.calendar.numberOfDays);
   const events = useAppSelector(state => state.calendar.events);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
 
   const _onDragCreateEventEnd = (event: OnCreateEventResponse) => {
     const newEvent: EventItem = {
@@ -82,26 +88,39 @@ export default function Calendar() {
     });
   };
 
+  const _onPressEvent = useCallback((event: EventItem) => {
+    setSelectedEvent(event);
+    bottomSheetRef.current?.snapToPosition('50%');
+  }, []);
+
   return (
-    <CalendarContainer
-      ref={calendarRef}
-      locale="en"
-      theme={CALENDAR_THEME.light}
-      initialDate={INITIAL_DATE}
-      minDate={MIN_DATE}
-      maxDate={MAX_DATE}
-      numberOfDays={numberOfDays}
-      firstDay={1}
-      calendarWidth={calendarWidth}
-      initialLocales={initialLocales}
-      minRegularEventMinutes={30}
-      initialTimeIntervalHeight={80}
-      showWeekNumber
-      scrollByDay
-      allowDragToCreate
-      onDragCreateEventEnd={_onDragCreateEventEnd}>
-      <CalendarHeader />
-      <CalendarBody />
-    </CalendarContainer>
+    <View style={{ flex: 1 }}>
+      <CalendarContainer
+        ref={calendarRef}
+        locale="en"
+        theme={CALENDAR_THEME.light}
+        initialDate={INITIAL_DATE}
+        minDate={MIN_DATE}
+        maxDate={MAX_DATE}
+        numberOfDays={numberOfDays}
+        firstDay={1}
+        calendarWidth={calendarWidth}
+        initialLocales={initialLocales}
+        minRegularEventMinutes={30}
+        initialTimeIntervalHeight={80}
+        showWeekNumber
+        scrollByDay
+        allowDragToCreate
+        events={events}
+        onDragCreateEventEnd={_onDragCreateEventEnd}
+        onPressEvent={_onPressEvent}>
+        <CalendarHeader />
+        <CalendarBody />
+      </CalendarContainer>
+      <EventBottomSheet
+        bottomSheetRef={bottomSheetRef}
+        selectedEvent={selectedEvent}
+      />
+    </View>
   );
 }
