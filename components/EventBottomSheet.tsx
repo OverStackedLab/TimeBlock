@@ -1,7 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
+  Keyboard,
+} from 'react-native';
 import { Text, Button, TextInput, MD3Colors } from 'react-native-paper';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, {
+  BottomSheetView,
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+} from '@gorhom/bottom-sheet';
 import { EventItem } from '@howljs/calendar-kit';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { updateEvent, deleteEvent } from '@/services/calendarSlice';
@@ -20,6 +30,7 @@ export default function EventBottomSheet({
 }: EventBottomSheetProps) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+
   const [eventTitle, setEventTitle] = useState(selectedEvent?.title || '');
   const [eventDate, setEventDate] = useState(
     selectedEvent?.start.dateTime
@@ -39,6 +50,20 @@ export default function EventBottomSheet({
       );
     }
   }, [selectedEvent]);
+
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop
+        {...props}
+        pressBehavior="close"
+        onPress={() => {
+          bottomSheetRef.current?.close();
+          Keyboard.dismiss();
+        }}
+      />
+    ),
+    [],
+  );
 
   const handleSheetChange = useCallback((index: number) => {
     // if (index === -1) {
@@ -61,12 +86,31 @@ export default function EventBottomSheet({
     }
   }, [selectedEvent, dispatch]);
 
+  const _onFocus = useCallback(
+    (args: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      bottomSheetRef.current?.snapToIndex(2);
+    },
+    [],
+  );
+
+  const _onBlur = useCallback(
+    (args: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      console.log('onBlur', args);
+    },
+    [],
+  );
+
+  const _onSubmitEditing = () => {
+    bottomSheetRef.current?.snapToIndex(1);
+  };
+
   return (
     <BottomSheet
       ref={bottomSheetRef}
       snapPoints={snapPoints}
       index={-1}
       enablePanDownToClose
+      backdropComponent={renderBackdrop}
       backgroundStyle={{ backgroundColor: '#fafafa' }}>
       <BottomSheetView style={styles.contentContainer}>
         <View style={styles.section}>
@@ -77,6 +121,9 @@ export default function EventBottomSheet({
             style={styles.input}
             underlineColor={theme.colors.secondary}
             activeUnderlineColor={theme.colors.brandPrimary}
+            onFocus={_onFocus}
+            onBlur={_onBlur}
+            onSubmitEditing={_onSubmitEditing}
           />
         </View>
         <View style={styles.section}>
@@ -88,6 +135,7 @@ export default function EventBottomSheet({
             inputMode="start"
             mode="flat"
             style={styles.input}
+            onFocus={_onFocus}
           />
         </View>
         <View style={styles.section}>
