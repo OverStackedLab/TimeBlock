@@ -38,7 +38,7 @@ export default function EventBottomSheet({
       : undefined,
   );
   const [visible, setVisible] = useState(false);
-  const snapPoints = useMemo(() => ['50%', '90%', '100%'], []);
+  const snapPoints = useMemo(() => ['45%', '85%', '95%'], []);
 
   useEffect(() => {
     if (selectedEvent) {
