@@ -18,6 +18,7 @@ import { updateEvent, deleteEvent } from '@/services/calendarSlice';
 import dayjs from 'dayjs';
 import { useTheme } from '@react-navigation/native';
 import { DatePickerInput, TimePickerModal } from 'react-native-paper-dates';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 type EventBottomSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet>;
@@ -127,7 +128,7 @@ export default function EventBottomSheet({
           />
         </View>
         <View style={styles.section}>
-          <DatePickerInput
+          {/* <DatePickerInput
             locale="en"
             label="Block Date"
             value={eventDate}
@@ -136,7 +137,12 @@ export default function EventBottomSheet({
             mode="flat"
             style={styles.input}
             onFocus={_onFocus}
-          />
+          /> */}
+          {/* <DateTimePicker
+            value={eventDate || new Date()}
+            mode="datetime"
+            display="spinner"
+          /> */}
         </View>
         <View style={styles.section}>
           <Text
@@ -182,7 +188,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 36,
   },
   input: {
-    backgroundColor: MD3Colors.neutral99,
+    // backgroundColor: MD3Colors.neutral99,
+    backgroundColor: '#fafafa',
   },
   buttonContainer: {
     flexDirection: 'row',
