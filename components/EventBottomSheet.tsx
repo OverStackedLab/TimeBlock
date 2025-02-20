@@ -5,8 +5,9 @@ import {
   NativeSyntheticEvent,
   TextInputFocusEventData,
   Keyboard,
+  TextInput as RNTextInput,
 } from 'react-native';
-import { Text, Button, TextInput, MD3Colors } from 'react-native-paper';
+import { Text, Button, MD3Colors, Icon, TextInput } from 'react-native-paper';
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -128,38 +129,35 @@ export default function EventBottomSheet({
           />
         </View>
         <View style={styles.section}>
-          {/* <DatePickerInput
-            locale="en"
-            label="Block Date"
-            value={eventDate}
-            onChange={setEventDate}
-            inputMode="start"
-            mode="flat"
-            style={styles.input}
-            onFocus={_onFocus}
-          /> */}
-          {/* <DateTimePicker
-            value={eventDate || new Date()}
-            mode="datetime"
-            display="spinner"
-          /> */}
+          <View style={styles.dateContainer}>
+            <Icon
+              source="calendar"
+              size={24}
+              color={theme.colors.brandPrimary}
+            />
+            <Text>{dayjs(eventDate).format('MM/DD/YYYY')}</Text>
+            <Text>
+              {dayjs(selectedEvent?.start.dateTime).format('h:mm A')} -{' '}
+              {dayjs(selectedEvent?.end.dateTime).format('h:mm A')}
+            </Text>
+          </View>
         </View>
-        <View style={styles.section}>
-          <Text
-            variant="bodyLarge"
-            style={styles.timeText}
-            onPress={() => setVisible(true)}>
-            {dayjs(selectedEvent?.start.dateTime).format('h:mm A')} -{' '}
-            {dayjs(selectedEvent?.end.dateTime).format('h:mm A')}
-          </Text>
+        <View
+          style={{
+            ...styles.section,
+            borderBottomColor: '#000',
+            borderBottomWidth: 1,
+          }}>
+          <RNTextInput
+            multiline
+            editable
+            style={{
+              height: 4 * 25,
+              backgroundColor: 'grey',
+              // flex: 1,
+            }}
+          />
         </View>
-        <TimePickerModal
-          visible={visible}
-          onDismiss={() => setVisible(false)}
-          onConfirm={() => setVisible(false)}
-          hours={12}
-          minutes={14}
-        />
         <View style={styles.buttonContainer}>
           <Button
             mode="text"
@@ -192,16 +190,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#fafafa',
   },
   buttonContainer: {
+    // position: 'absolute',
+    // bottom: 64,
+    // left: 32,
+    // right: 32,
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 8,
   },
   section: {
-    marginBottom: 48,
+    marginBottom: 16,
   },
   timeText: {
     marginTop: 8,
     color: 'rgba(28, 27, 31, 1)',
     paddingLeft: 16,
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
 });
