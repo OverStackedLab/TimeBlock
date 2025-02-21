@@ -20,6 +20,8 @@ import dayjs from 'dayjs';
 import { useTheme } from '@react-navigation/native';
 import { DatePickerInput, TimePickerModal } from 'react-native-paper-dates';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import ColorPicker from './ColorPicker';
+// import Icon from '@react-native-vector-icons/fontawesome';
 
 type EventBottomSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet>;
@@ -40,7 +42,7 @@ export default function EventBottomSheet({
       : undefined,
   );
   const [visible, setVisible] = useState(false);
-  const snapPoints = useMemo(() => ['45%', '85%', '95%'], []);
+  const snapPoints = useMemo(() => ['60%', '75%', '85%'], []);
 
   useEffect(() => {
     if (selectedEvent) {
@@ -53,18 +55,33 @@ export default function EventBottomSheet({
     }
   }, [selectedEvent]);
 
-  const renderBackdrop = useCallback(
-    (props: BottomSheetBackdropProps) => (
-      <BottomSheetBackdrop
-        {...props}
-        pressBehavior="close"
-        onPress={() => {
-          bottomSheetRef.current?.close();
-          Keyboard.dismiss();
-        }}
-      />
-    ),
-    [],
+  // const renderBackdrop = useCallback(
+  //   (props: BottomSheetBackdropProps) => (
+  //     <BottomSheetBackdrop
+  //       {...props}
+  //       disappearsOnIndex={0}
+  //       appearsOnIndex={1}
+  //       pressBehavior="close"
+  //       onPress={() => {
+  //         bottomSheetRef.current?.close();
+  //         Keyboard.dismiss();
+  //       }}
+  //     />
+  //   ),
+  //   [],
+  // );
+
+  const renderBackdrop = (props: BottomSheetBackdropProps) => (
+    <BottomSheetBackdrop
+      {...props}
+      appearsOnIndex={0}
+      disappearsOnIndex={-1}
+      pressBehavior="close"
+      onPress={() => {
+        bottomSheetRef.current?.close();
+        Keyboard.dismiss();
+      }}
+    />
   );
 
   const handleSheetChange = useCallback((index: number) => {
@@ -103,7 +120,7 @@ export default function EventBottomSheet({
   );
 
   const _onSubmitEditing = () => {
-    bottomSheetRef.current?.snapToIndex(1);
+    bottomSheetRef.current?.snapToIndex(0);
   };
 
   return (
@@ -112,6 +129,8 @@ export default function EventBottomSheet({
       snapPoints={snapPoints}
       index={-1}
       enablePanDownToClose
+      // keyboardBehavior="interactive"
+      // keyboardBlurBehavior="restore"
       backdropComponent={renderBackdrop}
       backgroundStyle={{ backgroundColor: '#fafafa' }}>
       <BottomSheetView style={styles.contentContainer}>
@@ -145,18 +164,31 @@ export default function EventBottomSheet({
         <View
           style={{
             ...styles.section,
-            borderBottomColor: '#000',
-            borderBottomWidth: 1,
+            borderRadius: 8,
+            borderWidth: 0.5,
+            borderColor: '#000',
+            padding: 8,
           }}>
           <RNTextInput
-            multiline
+            multiline={true}
             editable
+            inputMode="text"
             style={{
-              height: 4 * 25,
-              backgroundColor: 'grey',
-              // flex: 1,
+              padding: 8,
+              height: 3 * 25,
+            }}
+            onFocus={_onFocus}
+            onBlur={_onBlur}
+            onKeyPress={({ nativeEvent }) => {
+              if (nativeEvent.key === 'Enter') {
+                bottomSheetRef.current?.snapToPosition('55%');
+                Keyboard.dismiss();
+              }
             }}
           />
+        </View>
+        <View style={styles.section}>
+          <ColorPicker selectedColor={'#FF4B4B'} onSelectColor={() => {}} />
         </View>
         <View style={styles.buttonContainer}>
           <Button
@@ -183,6 +215,7 @@ export default function EventBottomSheet({
 
 const styles = StyleSheet.create({
   contentContainer: {
+    flex: 1,
     paddingHorizontal: 36,
   },
   input: {
@@ -199,7 +232,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   section: {
-    marginBottom: 16,
+    marginBottom: 24,
   },
   timeText: {
     marginTop: 8,

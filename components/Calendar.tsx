@@ -90,7 +90,7 @@ export default function Calendar() {
 
   const _onPressEvent = useCallback((event: EventItem) => {
     setSelectedEvent(event);
-    bottomSheetRef.current?.snapToPosition('50%');
+    bottomSheetRef.current?.snapToIndex(0);
   }, []);
 
   return (
