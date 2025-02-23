@@ -6,6 +6,7 @@ import {
   TextInputFocusEventData,
   Keyboard,
   TextInput as RNTextInput,
+  Platform,
 } from 'react-native';
 import {
   Text,
@@ -39,6 +40,10 @@ type IOS_DISPLAY =
 
 type IOS_MODE = 'date' | 'time' | 'datetime' | 'countdown';
 
+type ANDROID_DISPLAY = 'calendar' | 'spinner' | 'clock' | 'default';
+
+type ANDROID_MODE = 'date' | 'time';
+
 type EventBottomSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet>;
   selectedEvent: EventItem | null;
@@ -59,9 +64,13 @@ export default function EventBottomSheet({
   );
 
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState<IOS_MODE>('date');
+  const [mode, setMode] = useState<IOS_MODE | ANDROID_MODE>(
+    Platform.OS === 'ios' ? 'date' : 'date',
+  );
   const [show, setShow] = useState(false);
-  const [displayMode, setDisplayMode] = useState<IOS_DISPLAY>('inline');
+  const [displayMode, setDisplayMode] = useState<IOS_DISPLAY | ANDROID_DISPLAY>(
+    Platform.OS === 'ios' ? 'inline' : 'calendar',
+  );
 
   const snapPoints = useMemo(() => ['60%', '75%', '85%'], []);
 
@@ -242,9 +251,18 @@ export default function EventBottomSheet({
           }}>
           <RNDateTimePicker
             value={date}
-            mode={mode}
-            display={displayMode}
-            // onChange={onChange}
+            mode={
+              Platform.OS === 'ios'
+                ? (mode as IOS_MODE)
+                : ('date' as ANDROID_MODE)
+            }
+            display={
+              Platform.OS === 'ios' ? (displayMode as IOS_DISPLAY) : 'default'
+            }
+            onChange={(event, selectedDate) => {
+              setShow(false);
+              if (selectedDate) setDate(selectedDate);
+            }}
           />
         </Modal>
       </Portal>
