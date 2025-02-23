@@ -7,7 +7,15 @@ import {
   Keyboard,
   TextInput as RNTextInput,
 } from 'react-native';
-import { Text, Button, MD3Colors, Icon, TextInput } from 'react-native-paper';
+import {
+  Text,
+  Button,
+  MD3Colors,
+  Icon,
+  TextInput,
+  Modal,
+  Portal,
+} from 'react-native-paper';
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -18,10 +26,18 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { updateEvent, deleteEvent } from '@/services/calendarSlice';
 import dayjs from 'dayjs';
 import { useTheme } from '@react-navigation/native';
-import { DatePickerInput, TimePickerModal } from 'react-native-paper-dates';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 import ColorPicker from './ColorPicker';
-// import Icon from '@react-native-vector-icons/fontawesome';
+
+type IOS_DISPLAY =
+  | 'calendar'
+  | 'spinner'
+  | 'inline'
+  | 'default'
+  | 'compact'
+  | 'clock';
+
+type IOS_MODE = 'date' | 'time' | 'datetime' | 'countdown';
 
 type EventBottomSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet>;
@@ -41,7 +57,12 @@ export default function EventBottomSheet({
       ? new Date(selectedEvent.start.dateTime)
       : undefined,
   );
-  const [visible, setVisible] = useState(false);
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState<IOS_MODE>('date');
+  const [show, setShow] = useState(false);
+  const [displayMode, setDisplayMode] = useState<IOS_DISPLAY>('inline');
+
   const snapPoints = useMemo(() => ['60%', '75%', '85%'], []);
 
   useEffect(() => {
@@ -55,40 +76,21 @@ export default function EventBottomSheet({
     }
   }, [selectedEvent]);
 
-  // const renderBackdrop = useCallback(
-  //   (props: BottomSheetBackdropProps) => (
-  //     <BottomSheetBackdrop
-  //       {...props}
-  //       disappearsOnIndex={0}
-  //       appearsOnIndex={1}
-  //       pressBehavior="close"
-  //       onPress={() => {
-  //         bottomSheetRef.current?.close();
-  //         Keyboard.dismiss();
-  //       }}
-  //     />
-  //   ),
-  //   [],
-  // );
-
-  const renderBackdrop = (props: BottomSheetBackdropProps) => (
-    <BottomSheetBackdrop
-      {...props}
-      appearsOnIndex={0}
-      disappearsOnIndex={-1}
-      pressBehavior="close"
-      onPress={() => {
-        bottomSheetRef.current?.close();
-        Keyboard.dismiss();
-      }}
-    />
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        pressBehavior="close"
+        onPress={() => {
+          bottomSheetRef.current?.close();
+          Keyboard.dismiss();
+        }}
+      />
+    ),
+    [],
   );
-
-  const handleSheetChange = useCallback((index: number) => {
-    // if (index === -1) {
-    //   setShowDeleteDialog(false);
-    // }
-  }, []);
 
   const handleUpdateEvent = useCallback(() => {
     if (selectedEvent && eventTitle.trim()) {
@@ -124,92 +126,129 @@ export default function EventBottomSheet({
   };
 
   return (
-    <BottomSheet
-      ref={bottomSheetRef}
-      snapPoints={snapPoints}
-      index={-1}
-      enablePanDownToClose
-      // keyboardBehavior="interactive"
-      // keyboardBlurBehavior="restore"
-      backdropComponent={renderBackdrop}
-      backgroundStyle={{ backgroundColor: '#fafafa' }}>
-      <BottomSheetView style={styles.contentContainer}>
-        <View style={styles.section}>
-          <TextInput
-            label="Block Title"
-            value={eventTitle}
-            onChangeText={setEventTitle}
-            style={styles.input}
-            underlineColor={theme.colors.secondary}
-            activeUnderlineColor={theme.colors.brandPrimary}
-            onFocus={_onFocus}
-            onBlur={_onBlur}
-            onSubmitEditing={_onSubmitEditing}
-          />
-        </View>
-        <View style={styles.section}>
-          <View style={styles.dateContainer}>
-            <Icon
-              source="calendar"
-              size={24}
-              color={theme.colors.brandPrimary}
+    <>
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={snapPoints}
+        index={-1}
+        enablePanDownToClose
+        backdropComponent={renderBackdrop}
+        backgroundStyle={{ backgroundColor: '#fafafa' }}>
+        <BottomSheetView style={styles.contentContainer}>
+          <View style={styles.section}>
+            <TextInput
+              label="Block Title"
+              value={eventTitle}
+              onChangeText={setEventTitle}
+              style={styles.input}
+              underlineColor={theme.colors.secondary}
+              activeUnderlineColor={theme.colors.brandPrimary}
+              onFocus={_onFocus}
+              onBlur={_onBlur}
+              onSubmitEditing={_onSubmitEditing}
             />
-            <Text>{dayjs(eventDate).format('MM/DD/YYYY')}</Text>
-            <Text>
-              {dayjs(selectedEvent?.start.dateTime).format('h:mm A')} -{' '}
-              {dayjs(selectedEvent?.end.dateTime).format('h:mm A')}
-            </Text>
           </View>
-        </View>
-        <View
-          style={{
-            ...styles.section,
-            borderRadius: 8,
-            borderWidth: 0.5,
-            borderColor: '#000',
-            padding: 8,
-          }}>
-          <RNTextInput
-            multiline={true}
-            editable
-            inputMode="text"
+          <View style={styles.section}>
+            <View style={styles.dateContainer}>
+              <Icon
+                source="calendar"
+                size={24}
+                color={theme.colors.brandPrimary}
+              />
+              <Text
+                onPress={() => {
+                  setMode('date');
+                  setDisplayMode('inline');
+                  setShow(true);
+                }}>
+                {dayjs(eventDate).format('MM/DD/YYYY')}
+              </Text>
+              <Text
+                onPress={() => {
+                  setMode('time');
+                  setDisplayMode('spinner');
+                  setShow(true);
+                }}>
+                {dayjs(selectedEvent?.start.dateTime).format('h:mm A')} -
+              </Text>
+              <Text
+                onPress={() => {
+                  setMode('time');
+                  setDisplayMode('spinner');
+                  setShow(true);
+                }}>
+                {dayjs(selectedEvent?.end.dateTime).format('h:mm A')}
+              </Text>
+            </View>
+          </View>
+          <View
             style={{
+              ...styles.section,
+              borderRadius: 8,
+              borderWidth: 0.5,
+              borderColor: '#000',
               padding: 8,
-              height: 3 * 25,
-            }}
-            onFocus={_onFocus}
-            onBlur={_onBlur}
-            onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === 'Enter') {
-                bottomSheetRef.current?.snapToPosition('55%');
-                Keyboard.dismiss();
-              }
-            }}
+            }}>
+            <RNTextInput
+              multiline={true}
+              editable
+              inputMode="text"
+              style={{
+                padding: 8,
+                height: 3 * 25,
+              }}
+              onFocus={_onFocus}
+              onBlur={_onBlur}
+              onKeyPress={({ nativeEvent }) => {
+                if (nativeEvent.key === 'Enter') {
+                  bottomSheetRef.current?.snapToPosition('55%');
+                  Keyboard.dismiss();
+                }
+              }}
+            />
+          </View>
+          <View style={styles.section}>
+            <ColorPicker selectedColor={'#FF4B4B'} onSelectColor={() => {}} />
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              mode="text"
+              icon="check"
+              onPress={handleUpdateEvent}
+              labelStyle={{ fontSize: 20 }}
+              textColor={theme.colors.brandPrimary}>
+              Save
+            </Button>
+            <Button
+              mode="text"
+              icon="delete"
+              labelStyle={{ fontSize: 20 }}
+              onPress={handleDeleteEvent}
+              textColor={theme.colors.brandPrimary}>
+              Delete
+            </Button>
+          </View>
+        </BottomSheetView>
+      </BottomSheet>
+      <Portal>
+        <Modal
+          visible={show}
+          onDismiss={() => setShow(false)}
+          contentContainerStyle={{
+            backgroundColor: 'white',
+            padding: 18,
+            marginHorizontal: 16,
+            borderRadius: 8,
+          }}>
+          <RNDateTimePicker
+            value={date}
+            mode={mode}
+            display={displayMode}
+            // onChange={onChange}
           />
-        </View>
-        <View style={styles.section}>
-          <ColorPicker selectedColor={'#FF4B4B'} onSelectColor={() => {}} />
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            mode="text"
-            icon="check"
-            onPress={handleUpdateEvent}
-            labelStyle={{ fontSize: 20 }}
-            textColor={theme.colors.brandPrimary}>
-            Save
-          </Button>
-          <Button
-            mode="text"
-            icon="delete"
-            labelStyle={{ fontSize: 20 }}
-            onPress={handleDeleteEvent}
-            textColor={theme.colors.brandPrimary}>
-            Delete
-          </Button>
-        </View>
-      </BottomSheetView>
-    </BottomSheet>
+        </Modal>
+      </Portal>
+    </>
   );
 }
 
@@ -219,14 +258,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 36,
   },
   input: {
-    // backgroundColor: MD3Colors.neutral99,
     backgroundColor: '#fafafa',
   },
   buttonContainer: {
-    // position: 'absolute',
-    // bottom: 64,
-    // left: 32,
-    // right: 32,
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 8,
