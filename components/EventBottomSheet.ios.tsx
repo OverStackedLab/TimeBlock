@@ -27,22 +27,10 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { updateEvent, deleteEvent } from '@/services/calendarSlice';
 import dayjs from 'dayjs';
 import { useTheme } from '@react-navigation/native';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker, {
+  IOSNativeProps,
+} from '@react-native-community/datetimepicker';
 import ColorPicker from './ColorPicker';
-
-type IOS_DISPLAY =
-  | 'calendar'
-  | 'spinner'
-  | 'inline'
-  | 'default'
-  | 'compact'
-  | 'clock';
-
-type IOS_MODE = 'date' | 'time' | 'datetime' | 'countdown';
-
-type ANDROID_DISPLAY = 'calendar' | 'spinner' | 'clock' | 'default';
-
-type ANDROID_MODE = 'date' | 'time';
 
 type EventBottomSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet>;
@@ -64,13 +52,10 @@ export default function EventBottomSheet({
   );
 
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState<IOS_MODE | ANDROID_MODE>(
-    Platform.OS === 'ios' ? 'date' : 'date',
-  );
+  const [mode, setMode] = useState<IOSNativeProps['mode']>('date');
   const [show, setShow] = useState(false);
-  const [displayMode, setDisplayMode] = useState<IOS_DISPLAY | ANDROID_DISPLAY>(
-    Platform.OS === 'ios' ? 'inline' : 'calendar',
-  );
+  const [displayMode, setDisplayMode] =
+    useState<IOSNativeProps['display']>('inline');
 
   const snapPoints = useMemo(() => ['60%', '75%', '85%'], []);
 
@@ -251,14 +236,8 @@ export default function EventBottomSheet({
           }}>
           <RNDateTimePicker
             value={date}
-            mode={
-              Platform.OS === 'ios'
-                ? (mode as IOS_MODE)
-                : ('date' as ANDROID_MODE)
-            }
-            display={
-              Platform.OS === 'ios' ? (displayMode as IOS_DISPLAY) : 'default'
-            }
+            mode={mode}
+            display={displayMode}
             onChange={(event, selectedDate) => {
               setShow(false);
               if (selectedDate) setDate(selectedDate);

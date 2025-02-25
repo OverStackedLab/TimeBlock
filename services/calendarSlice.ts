@@ -43,4 +43,7 @@ export const selectNumberOfDays = (state: RootState) =>
   state.calendar.numberOfDays;
 export const selectEvents = (state: RootState) => state.calendar.events;
 
+export const selectEventById = (state: RootState, eventId: string) =>
+  state.calendar.events.find(event => event.id === eventId);
+
 export default calendarSlice.reducer;
