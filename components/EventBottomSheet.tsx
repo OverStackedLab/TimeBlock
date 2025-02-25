@@ -211,7 +211,10 @@ export default function EventBottomSheet({
             />
           </View>
           <View style={styles.section}>
-            <ColorPicker selectedColor={'#FF4B4B'} onSelectColor={() => {}} />
+            <ColorPicker
+              selectedColor={eventColor}
+              onSelectColor={setEventColor}
+            />
           </View>
           <View style={styles.buttonContainer}>
             <Button

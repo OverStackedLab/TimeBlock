@@ -40,22 +40,20 @@ export default function ColorPicker({
         {COLORS.map((color, index) => {
           if (selectedColor === color) {
             return (
-              <Icon
+              <Pressable
                 key={`color-${color}-${index}`}
-                source="checkbox-marked-circle"
-                size={28}
-                color={color}
-              />
+                onPress={() => onSelectColor(color)}>
+                <Icon source="checkbox-marked-circle" size={28} color={color} />
+              </Pressable>
             );
           }
 
           return (
-            <Icon
+            <Pressable
               key={`color-${color}-${index}`}
-              source="checkbox-blank-circle"
-              size={28}
-              color={color}
-            />
+              onPress={() => onSelectColor(color)}>
+              <Icon source="checkbox-blank-circle" size={28} color={color} />
+            </Pressable>
           );
         })}
       </View>
