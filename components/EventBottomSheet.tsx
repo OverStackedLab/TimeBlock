@@ -34,23 +34,33 @@ import ColorPicker from './ColorPicker';
 
 type EventBottomSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet>;
-  selectedEvent: EventItem | null;
+  event: EventItem | null;
 };
 
 export default function EventBottomSheet({
   bottomSheetRef,
-  selectedEvent,
+  event,
 }: EventBottomSheetProps) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const [eventTitle, setEventTitle] = useState(selectedEvent?.title || '');
+  const [eventTitle, setEventTitle] = useState(event?.title || '');
   const [eventDate, setEventDate] = useState(
-    selectedEvent?.start.dateTime
-      ? new Date(selectedEvent.start.dateTime)
-      : undefined,
+    event?.start.dateTime ? new Date(event.start.dateTime) : undefined,
   );
-
+  const [eventStartTime, setEventStartTime] = useState(
+    event?.start.dateTime ? new Date(event.start.dateTime) : undefined,
+  );
+  const [eventEndTime, setEventEndTime] = useState(
+    event?.end.dateTime ? new Date(event.end.dateTime) : undefined,
+  );
+  const [eventColor, setEventColor] = useState(event?.color || '#FF4B4B');
+  const [eventDescription, setEventDescription] = useState(
+    event?.description || '',
+  );
+  const [timePickerType, setTimePickerType] = useState<'start' | 'end'>(
+    'start',
+  );
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState<IOSNativeProps['mode']>('date');
   const [show, setShow] = useState(false);
@@ -60,15 +70,13 @@ export default function EventBottomSheet({
   const snapPoints = useMemo(() => ['60%', '75%', '85%'], []);
 
   useEffect(() => {
-    if (selectedEvent) {
-      setEventTitle(selectedEvent.title || '');
+    if (event) {
+      setEventTitle(event.title || '');
       setEventDate(
-        selectedEvent.start.dateTime
-          ? new Date(selectedEvent.start.dateTime)
-          : undefined,
+        event.start.dateTime ? new Date(event.start.dateTime) : undefined,
       );
     }
-  }, [selectedEvent]);
+  }, [event]);
 
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (
@@ -87,19 +95,18 @@ export default function EventBottomSheet({
   );
 
   const handleUpdateEvent = useCallback(() => {
-    if (selectedEvent && eventTitle.trim()) {
-      dispatch(updateEvent({ ...selectedEvent, title: eventTitle.trim() }));
+    if (event && eventTitle.trim()) {
+      dispatch(updateEvent({ ...event, title: eventTitle.trim() }));
       bottomSheetRef.current?.close();
     }
-  }, [selectedEvent, eventTitle, dispatch]);
+  }, [event, eventTitle, dispatch]);
 
   const handleDeleteEvent = useCallback(() => {
-    if (selectedEvent) {
-      dispatch(deleteEvent(selectedEvent.id));
-      // setShowDeleteDialog(false);
+    if (event) {
+      dispatch(deleteEvent(event.id));
       bottomSheetRef.current?.close();
     }
-  }, [selectedEvent, dispatch]);
+  }, [event, dispatch]);
 
   const _onFocus = useCallback(
     (args: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -159,19 +166,21 @@ export default function EventBottomSheet({
               </Text>
               <Text
                 onPress={() => {
+                  setTimePickerType('start');
                   setMode('time');
                   setDisplayMode('spinner');
                   setShow(true);
                 }}>
-                {dayjs(selectedEvent?.start.dateTime).format('h:mm A')} -
+                {dayjs(eventStartTime).format('h:mm A')} -
               </Text>
               <Text
                 onPress={() => {
+                  setTimePickerType('end');
                   setMode('time');
                   setDisplayMode('spinner');
                   setShow(true);
                 }}>
-                {dayjs(selectedEvent?.end.dateTime).format('h:mm A')}
+                {dayjs(eventEndTime).format('h:mm A')}
               </Text>
             </View>
           </View>
@@ -238,11 +247,49 @@ export default function EventBottomSheet({
             value={date}
             mode={mode}
             display={displayMode}
-            onChange={(event, selectedDate) => {
-              setShow(false);
-              if (selectedDate) setDate(selectedDate);
+            onChange={(_, selectedDate) => {
+              if (mode === 'date') {
+                if (selectedDate) {
+                  setEventDate(selectedDate);
+                }
+              }
+              if (mode === 'time' && timePickerType === 'start') {
+                if (selectedDate) {
+                  setEventStartTime(selectedDate);
+                }
+              }
+              if (mode === 'time' && timePickerType === 'end') {
+                if (selectedDate) {
+                  setEventEndTime(selectedDate);
+                }
+              }
             }}
           />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              gap: 8,
+              marginTop: 16,
+            }}>
+            <Button
+              mode="text"
+              onPress={() => {
+                setShow(false);
+                if (date) {
+                  setEventDate(date);
+                }
+              }}
+              textColor={theme.colors.brandPrimary}>
+              OK
+            </Button>
+            <Button
+              mode="text"
+              onPress={() => setShow(false)}
+              textColor={theme.colors.brandPrimary}>
+              CLOSE
+            </Button>
+          </View>
         </Modal>
       </Portal>
     </>

@@ -117,10 +117,7 @@ export default function Calendar() {
         <CalendarHeader />
         <CalendarBody />
       </CalendarContainer>
-      <EventBottomSheet
-        bottomSheetRef={bottomSheetRef}
-        selectedEvent={selectedEvent}
-      />
+      <EventBottomSheet event={selectedEvent} bottomSheetRef={bottomSheetRef} />
     </View>
   );
 }
