@@ -54,7 +54,9 @@ export default function ColorPicker({
           return (
             <Pressable
               key={`color-${color}-${index}`}
-              onPress={() => onSelectColor(color)}>
+              onPress={() => {
+                onSelectColor(color);
+              }}>
               <Icon source="checkbox-blank-circle" size={28} color={color} />
             </Pressable>
           );

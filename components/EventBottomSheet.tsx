@@ -48,13 +48,9 @@ export default function EventBottomSheet({
   const [eventDate, setEventDate] = useState(
     event?.start.dateTime ? new Date(event.start.dateTime) : undefined,
   );
-  const [eventStartTime, setEventStartTime] = useState(
-    event?.start.dateTime ? new Date(event.start.dateTime) : undefined,
-  );
-  const [eventEndTime, setEventEndTime] = useState(
-    event?.end.dateTime ? new Date(event.end.dateTime) : undefined,
-  );
-  const [eventColor, setEventColor] = useState(event?.color || '#FF4B4B');
+  const [eventStartTime, setEventStartTime] = useState(event?.start?.dateTime);
+  const [eventEndTime, setEventEndTime] = useState(event?.end.dateTime);
+  const [eventColor, setEventColor] = useState(event?.color || '#f57c00');
   const [eventDescription, setEventDescription] = useState(
     event?.description || '',
   );
@@ -67,7 +63,7 @@ export default function EventBottomSheet({
   const [displayMode, setDisplayMode] =
     useState<IOSNativeProps['display']>('inline');
 
-  const snapPoints = useMemo(() => ['60%', '75%', '85%'], []);
+  const snapPoints = useMemo(() => ['65%', '75%', '85%'], []);
 
   useEffect(() => {
     if (event) {
@@ -75,6 +71,10 @@ export default function EventBottomSheet({
       setEventDate(
         event.start.dateTime ? new Date(event.start.dateTime) : undefined,
       );
+      setEventStartTime(event.start.dateTime);
+      setEventEndTime(event.end.dateTime);
+      setEventColor(event.color || '#f57c00');
+      setEventDescription(event.description || '');
     }
   }, [event]);
 
@@ -95,11 +95,18 @@ export default function EventBottomSheet({
   );
 
   const handleUpdateEvent = useCallback(() => {
-    if (event && eventTitle.trim()) {
-      dispatch(updateEvent({ ...event, title: eventTitle.trim() }));
+    if (event) {
+      dispatch(
+        updateEvent({
+          ...event,
+          title: eventTitle.trim(),
+          description: eventDescription.trim(),
+          color: eventColor,
+        }),
+      );
       bottomSheetRef.current?.close();
     }
-  }, [event, eventTitle, dispatch]);
+  }, [event, eventTitle, eventDescription, eventColor]);
 
   const handleDeleteEvent = useCallback(() => {
     if (event) {
@@ -196,6 +203,8 @@ export default function EventBottomSheet({
               multiline={true}
               editable
               inputMode="text"
+              value={eventDescription}
+              onChangeText={setEventDescription}
               style={{
                 padding: 8,
                 height: 3 * 25,

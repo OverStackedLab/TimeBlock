@@ -77,6 +77,9 @@ export default function Calendar() {
       id: generateId(),
       title: 'New Event',
       color: theme.colors.brandPrimary,
+      extendedProps: {
+        description: '',
+      },
     };
 
     dispatch(addEvent(newEvent));
