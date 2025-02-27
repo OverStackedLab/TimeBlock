@@ -5,22 +5,25 @@ import { Icon } from 'react-native-paper';
 
 const COLORS = [
   // First row
-  '#FF4B4B', // Red
-  '#FF9500', // Orange
-  '#FFD60A', // Yellow
-  '#4CD964', // Green
-  '#0A84FF', // Blue
-  '#BF5AF2', // Purple
-  '#8E8E93', // Gray
+  '#f44336', // Red
+  '#f57c00', // Orange
+  '#fdd835', // Yellow
+  '#4caf50', // Green
+  '#2196f3', // Blue
+  '#ab47bc', // Purple
+  '#9e9e9e', // Gray
 
   // Second row
-  '#65432F', // Brown
-  '#FF2D55', // Pink
-  '#00A699', // Teal
-  '#D4E157', // Lime
-  '#FF3D00', // Deep Orange
-  '#00BCD4', // Cyan
-  '#673AB7', // Deep Purple
+  '#6d4c41', // Brown
+  '#e91e63', // Pink
+  '#e64a19', // Deep Orange
+  '#673ab7', // Deep Purple
+  '#607d8b', // Blue Grey
+  '#3f51b5', // Indigo
+  '#00bcd4', // Cyan
+  '#009688', // Teal
+  '#8bc34a', // Light Green
+  '#cddc39', // Lime
 ];
 
 type ColorPickerProps = {
