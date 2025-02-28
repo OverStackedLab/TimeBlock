@@ -34,12 +34,14 @@ import ColorPicker from './ColorPicker';
 
 type EventBottomSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet>;
-  event: EventItem | null;
+  event: EventItem | undefined;
+  setSelectedEvent: (event: EventItem | undefined) => void;
 };
 
 export default function EventBottomSheet({
   bottomSheetRef,
   event,
+  setSelectedEvent,
 }: EventBottomSheetProps) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -96,17 +98,32 @@ export default function EventBottomSheet({
 
   const handleUpdateEvent = useCallback(() => {
     if (event) {
-      dispatch(
-        updateEvent({
-          ...event,
-          title: eventTitle.trim(),
-          description: eventDescription.trim(),
-          color: eventColor,
-        }),
-      );
+      const updatedEvent: EventItem = {
+        ...event,
+        title: eventTitle.trim(),
+        description: eventDescription.trim(),
+        color: eventColor,
+      };
+
+      setSelectedEvent(undefined);
+      dispatch(updateEvent(updatedEvent));
       bottomSheetRef.current?.close();
     }
-  }, [event, eventTitle, eventDescription, eventColor]);
+  }, [event, eventTitle, eventDescription, eventColor, setSelectedEvent]);
+
+  // const handleUpdateEvent = () => {
+  //   if (event) {
+  //     dispatch(
+  //       updateEvent({
+  //         ...event,
+  //         title: eventTitle.trim(),
+  //         description: eventDescription.trim(),
+  //         color: eventColor,
+  //       }),
+  //     );
+  //     bottomSheetRef.current?.close();
+  //   }
+  // };
 
   const handleDeleteEvent = useCallback(() => {
     if (event) {

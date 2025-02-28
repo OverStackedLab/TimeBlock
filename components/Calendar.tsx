@@ -7,10 +7,11 @@ import {
   CalendarKitHandle,
   EventItem,
   OnCreateEventResponse,
+  SelectedEventType,
 } from '@howljs/calendar-kit';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { addEvent } from '@/services/calendarSlice';
+import { addEvent, updateEvent } from '@/services/calendarSlice';
 import { useTheme } from '@react-navigation/native';
 import { MD3Colors } from 'react-native-paper';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -69,32 +70,66 @@ export default function Calendar() {
   const numberOfDays = useAppSelector(state => state.calendar.numberOfDays);
   const events = useAppSelector(state => state.calendar.events);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<EventItem>();
+  const [activeEvent, setActiveEvent] = useState<EventItem>();
+
+  const _onPressToday = (date: string) => {
+    console.log('🚀 ~ const_onPressToday= ~ date:', date);
+    calendarRef.current?.goToDate({
+      date: date,
+    });
+  };
+
+  // const _onPressToday = useCallback(() => {
+  //   calendarRef.current?.goToDate({
+  //     date: new Date().toISOString(),
+  //     animatedDate: true,
+  //     hourScroll: true,
+  //   });
+  // }, []);
 
   const _onDragCreateEventEnd = (event: OnCreateEventResponse) => {
     const newEvent: EventItem = {
       ...event,
       id: generateId(),
-      title: 'New Event',
+      title: 'New Block',
       color: theme.colors.brandPrimary,
       extendedProps: {
         description: '',
       },
     };
 
+    setSelectedEvent(newEvent);
     dispatch(addEvent(newEvent));
   };
 
-  const gotoDate = (date: string) => {
-    calendarRef.current?.goToDate({
-      date: date,
-    });
-  };
+  const _onLongPressEvent = useCallback((event: EventItem) => {
+    setActiveEvent(event);
+    bottomSheetRef.current?.snapToIndex(0);
+    setSelectedEvent(undefined);
+  }, []);
 
   const _onPressEvent = useCallback((event: EventItem) => {
     setSelectedEvent(event);
-    bottomSheetRef.current?.snapToIndex(0);
   }, []);
+
+  const _onDragSelectedEventEnd = useCallback(
+    (event: SelectedEventType) => {
+      if (event.id) {
+        const updatedEvent: EventItem = {
+          ...event,
+          id: event.id,
+          title: event.title || 'New Block',
+          start: event.start,
+          end: event.end,
+          color: event.color || theme.colors.brandPrimary,
+        };
+        dispatch(updateEvent(updatedEvent));
+        setSelectedEvent(undefined);
+      }
+    },
+    [theme.colors.brandPrimary],
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -106,21 +141,37 @@ export default function Calendar() {
         minDate={MIN_DATE}
         maxDate={MAX_DATE}
         numberOfDays={numberOfDays}
-        firstDay={1}
         calendarWidth={calendarWidth}
         initialLocales={initialLocales}
+        defaultDuration={30}
+        dragStep={5}
+        firstDay={1}
         minRegularEventMinutes={30}
         initialTimeIntervalHeight={80}
         showWeekNumber
         scrollByDay
         allowDragToCreate
+        allowDragToEdit
         events={events}
+        selectedEvent={selectedEvent}
+        onDragCreateEventStart={() => {
+          // setSelectedEvent(undefined);
+        }}
+        onPressBackground={() => {
+          setSelectedEvent(undefined);
+        }}
+        onLongPressEvent={_onLongPressEvent}
+        onPressEvent={_onPressEvent}
         onDragCreateEventEnd={_onDragCreateEventEnd}
-        onPressEvent={_onPressEvent}>
+        onDragSelectedEventEnd={_onDragSelectedEventEnd}>
         <CalendarHeader />
         <CalendarBody />
       </CalendarContainer>
-      <EventBottomSheet event={selectedEvent} bottomSheetRef={bottomSheetRef} />
+      <EventBottomSheet
+        event={activeEvent}
+        bottomSheetRef={bottomSheetRef}
+        setSelectedEvent={setSelectedEvent}
+      />
     </View>
   );
 }
