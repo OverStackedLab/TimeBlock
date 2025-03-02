@@ -16,7 +16,8 @@ import { useTheme } from '@react-navigation/native';
 import { MD3Colors } from 'react-native-paper';
 import BottomSheet from '@gorhom/bottom-sheet';
 import EventBottomSheet from './EventBottomSheet';
-
+import Header from './Header';
+import { useSharedValue } from 'react-native-reanimated';
 const generateId = () => (Math.floor(Math.random() * 10000) + 1).toString();
 
 const MIN_DATE = new Date(
@@ -63,6 +64,7 @@ const initialLocales = {
 };
 
 export default function Calendar() {
+  const currentDate = useSharedValue(INITIAL_DATE);
   const calendarRef = useRef<CalendarKitHandle>(null);
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -73,20 +75,13 @@ export default function Calendar() {
   const [selectedEvent, setSelectedEvent] = useState<EventItem>();
   const [activeEvent, setActiveEvent] = useState<EventItem>();
 
-  const _onPressToday = (date: string) => {
-    console.log('🚀 ~ const_onPressToday= ~ date:', date);
+  const _onPressToday = useCallback(() => {
     calendarRef.current?.goToDate({
-      date: date,
+      date: new Date().toISOString(),
+      animatedDate: true,
+      hourScroll: true,
     });
-  };
-
-  // const _onPressToday = useCallback(() => {
-  //   calendarRef.current?.goToDate({
-  //     date: new Date().toISOString(),
-  //     animatedDate: true,
-  //     hourScroll: true,
-  //   });
-  // }, []);
+  }, []);
 
   const _onDragCreateEventEnd = (event: OnCreateEventResponse) => {
     const newEvent: EventItem = {
@@ -99,8 +94,8 @@ export default function Calendar() {
       },
     };
 
-    setSelectedEvent(newEvent);
     dispatch(addEvent(newEvent));
+    setSelectedEvent(undefined);
   };
 
   const _onLongPressEvent = useCallback((event: EventItem) => {
@@ -133,6 +128,7 @@ export default function Calendar() {
 
   return (
     <View style={{ flex: 1 }}>
+      <Header currentDate={currentDate} onPressToday={_onPressToday} />
       <CalendarContainer
         ref={calendarRef}
         locale="en"
@@ -154,9 +150,6 @@ export default function Calendar() {
         allowDragToEdit
         events={events}
         selectedEvent={selectedEvent}
-        onDragCreateEventStart={() => {
-          // setSelectedEvent(undefined);
-        }}
         onPressBackground={() => {
           setSelectedEvent(undefined);
         }}

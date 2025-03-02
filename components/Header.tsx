@@ -1,42 +1,42 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { DrawerActions } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
-import { useNavigation } from "expo-router";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { DrawerActions } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
+import { useNavigation } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   runOnJS,
   useAnimatedReaction,
   type SharedValue,
-} from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme } from "@react-navigation/native";
+} from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '@react-navigation/native';
 
-interface HeaderProps {
+type HeaderProps = {
   currentDate: SharedValue<string>;
   onPressToday?: () => void;
-}
+};
 
 const Header = ({ currentDate, onPressToday }: HeaderProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
   const { top: safeTop } = useSafeAreaInsets();
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
 
   const updateTitle = (date: string) => {
-    const formatted = new Date(date).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
+    const formatted = new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
     });
     setTitle(formatted);
   };
 
   useAnimatedReaction(
     () => currentDate.value,
-    (value) => {
+    value => {
       runOnJS(updateTitle)(value);
     },
-    []
+    [],
   );
 
   const _onPressMenu = () => {
@@ -51,14 +51,12 @@ const Header = ({ currentDate, onPressToday }: HeaderProps) => {
           paddingTop: safeTop + 16,
           backgroundColor: theme.colors.brandPrimary,
         },
-      ]}
-    >
+      ]}>
       <StatusBar style="light" />
       <TouchableOpacity
         activeOpacity={0.6}
         style={styles.menuBtn}
-        onPress={_onPressMenu}
-      >
+        onPress={_onPressMenu}>
         <MaterialCommunityIcons
           name="menu"
           size={24}
@@ -72,8 +70,7 @@ const Header = ({ currentDate, onPressToday }: HeaderProps) => {
         <TouchableOpacity
           hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
           activeOpacity={0.6}
-          onPress={onPressToday}
-        >
+          onPress={onPressToday}>
           <MaterialCommunityIcons
             name="calendar"
             size={24}
@@ -88,17 +85,17 @@ const Header = ({ currentDate, onPressToday }: HeaderProps) => {
 export default Header;
 const styles = StyleSheet.create({
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingBottom: 16,
     paddingHorizontal: 12,
   },
   menuBtn: { paddingRight: 12 },
   headerRightContent: {
-    flexDirection: "row",
+    flexDirection: 'row',
     flexGrow: 1,
-    alignItems: "center",
+    alignItems: 'center',
     flexShrink: 1,
   },
-  headerTitle: { flexGrow: 1, flexShrink: 1, fontSize: 16, fontWeight: "500" },
+  headerTitle: { flexGrow: 1, flexShrink: 1, fontSize: 16, fontWeight: '500' },
 });

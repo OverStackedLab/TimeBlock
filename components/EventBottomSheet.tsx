@@ -111,20 +111,6 @@ export default function EventBottomSheet({
     }
   }, [event, eventTitle, eventDescription, eventColor, setSelectedEvent]);
 
-  // const handleUpdateEvent = () => {
-  //   if (event) {
-  //     dispatch(
-  //       updateEvent({
-  //         ...event,
-  //         title: eventTitle.trim(),
-  //         description: eventDescription.trim(),
-  //         color: eventColor,
-  //       }),
-  //     );
-  //     bottomSheetRef.current?.close();
-  //   }
-  // };
-
   const handleDeleteEvent = useCallback(() => {
     if (event) {
       dispatch(deleteEvent(event.id));
