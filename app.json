@@ -9,7 +9,7 @@
     "newArchEnabled": true,
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/mytimeblock-logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
