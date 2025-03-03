@@ -11,7 +11,6 @@ import { setNumberOfDays } from '@/services/calendarSlice';
 import { useTheme } from '@react-navigation/native';
 import { Image, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Text } from 'react-native-paper';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 
 const DAY_OPTIONS = [1, 3, 5, 7];
 
@@ -38,8 +37,10 @@ export default function CustomDrawerContent(
               option === 1
                 ? 'calendar-today'
                 : option === 3
-                ? 'calendar-weekend'
-                : 'calendar-week';
+                ? 'calendar-range'
+                : option === 5
+                ? 'calendar-week'
+                : 'calendar-month';
             return (
               <Drawer.Item
                 key={option}
@@ -63,7 +64,16 @@ export default function CustomDrawerContent(
       </View>
       <Drawer.Section style={styles.footer} showDivider={false}>
         <View style={styles.userInfo}>
-          <Avatar.Icon size={40} icon="account" />
+          <Avatar.Icon
+            size={40}
+            icon="account"
+            color={theme.colors.white}
+            theme={{
+              colors: {
+                primary: theme.colors.brandPrimary,
+              },
+            }}
+          />
           <View style={styles.userTextContainer}>
             <Text style={styles.userEmail}>user@example.com</Text>
             <Text style={styles.userRole}>Administrator</Text>
@@ -75,6 +85,8 @@ export default function CustomDrawerContent(
           icon="logout"
           compact
           uppercase
+          buttonColor={theme.colors.brandPrimary}
+          textColor={theme.colors.white}
           onPress={() => console.log('Logout pressed')}
           style={styles.logoutButton}>
           Log Out
