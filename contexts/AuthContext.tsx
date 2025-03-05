@@ -10,6 +10,7 @@ type AuthContextType = {
 
 export function useSession() {
   const value = useContext(AuthContext);
+  console.log('🚀 ~ useSession ~ value:', value);
   if (process.env.NODE_ENV !== 'production') {
     if (!value) {
       throw new Error('useSession must be wrapped in a <AuthProvider />');
@@ -19,7 +20,13 @@ export function useSession() {
   return value;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+  signIn: () => Promise.resolve(),
+  signOut: () => Promise.resolve(),
+  signUp: () => Promise.resolve(),
+  isAuthenticated: false,
+  user: null,
+});
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

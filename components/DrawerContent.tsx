@@ -33,7 +33,7 @@ export default function CustomDrawerContent(
     <DrawerContentScrollView {...props}>
       <Drawer.Section style={styles.logoSection}>
         <Image
-          source={require('../assets/images/mytimeblock-logo.png')}
+          source={require('@/assets/images/mytimeblock-logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />

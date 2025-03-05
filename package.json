@@ -54,6 +54,7 @@
     "react-native-svg": "15.8.0",
     "react-native-web": "~0.19.13",
     "react-redux": "^9.2.0",
+    "redux-devtools-expo-dev-plugin": "^1.0.0",
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
