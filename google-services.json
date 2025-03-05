@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "48901059663",
+    "project_id": "timeblock-2024",
+    "storage_bucket": "timeblock-2024.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48901059663:android:f728576fd7a1c3749ea63a",
+        "android_client_info": {
+          "package_name": "com.overstacked.TimeBlock"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgvge3N6OMM3X_6y5PRKcTy3sgq-obNp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
