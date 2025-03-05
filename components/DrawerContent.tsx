@@ -11,6 +11,8 @@ import { setNumberOfDays } from '@/services/calendarSlice';
 import { useTheme } from '@react-navigation/native';
 import { Image, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Text } from 'react-native-paper';
+import { router } from 'expo-router';
+import { signOutSuccess } from '@/store/slices/authSlice';
 
 const DAY_OPTIONS = [1, 3, 5, 7];
 
@@ -20,6 +22,12 @@ export default function CustomDrawerContent(
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const numberOfDays = useAppSelector(state => state.calendar.numberOfDays);
+  // const { user } = useAppSelector(state => state.auth);
+
+  const handleLogout = async () => {
+    dispatch(signOutSuccess());
+    router.replace('/(auth)/sign-in');
+  };
 
   return (
     <DrawerContentScrollView {...props}>
@@ -87,7 +95,7 @@ export default function CustomDrawerContent(
           uppercase
           buttonColor={theme.colors.brandPrimary}
           textColor={theme.colors.white}
-          onPress={() => console.log('Logout pressed')}
+          onPress={handleLogout}
           style={styles.logoutButton}>
           Log Out
         </Button>
