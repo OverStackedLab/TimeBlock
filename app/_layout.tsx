@@ -5,13 +5,13 @@ import {
 } from '@react-navigation/native';
 import { PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { useFonts } from 'expo-font';
-import { Slot, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { store, persistor } from '@/store';
+import { store, persistor } from '@/store/';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import merge from 'deepmerge';
 
@@ -50,6 +50,7 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+  console.log('🚀 ~ RootLayout ~ loaded:', loaded);
 
   const paperTheme =
     colorScheme === 'dark' ? CombinedDarkTheme : CombinedLightTheme;
@@ -71,7 +72,7 @@ export default function RootLayout() {
           <ThemeProvider value={paperTheme}>
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+              {/* <Stack.Screen name="(drawer)" options={{ headerShown: false }} /> */}
             </Stack>
           </ThemeProvider>
         </PaperProvider>

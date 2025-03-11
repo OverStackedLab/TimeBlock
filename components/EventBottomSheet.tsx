@@ -24,7 +24,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { EventItem } from '@howljs/calendar-kit';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { updateEvent, deleteEvent } from '@/services/calendarSlice';
+import { updateEvent, deleteEvent } from '@/store/slices/calendarSlice';
 import dayjs from 'dayjs';
 import { useTheme } from '@react-navigation/native';
 import RNDateTimePicker, {

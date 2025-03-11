@@ -7,7 +7,7 @@ import { DrawerActions } from '@react-navigation/native';
 import { Drawer } from 'react-native-paper';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { setNumberOfDays } from '@/services/calendarSlice';
+import { setNumberOfDays } from '@/store/slices/calendarSlice';
 import { useTheme } from '@react-navigation/native';
 import { Image, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Text } from 'react-native-paper';
@@ -21,7 +21,8 @@ export default function CustomDrawerContent(
 ) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const numberOfDays = useAppSelector(state => state.calendar.numberOfDays);
+  // const numberOfDays = useAppSelector(state => state.calendar.numberOfDays);
+  const numberOfDays = 3;
   // const { user } = useAppSelector(state => state.auth);
 
   const handleLogout = async () => {

@@ -11,7 +11,7 @@ import {
 } from '@howljs/calendar-kit';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { addEvent, updateEvent } from '@/services/calendarSlice';
+import { addEvent, updateEvent } from '@/store/slices/calendarSlice';
 import { useTheme } from '@react-navigation/native';
 import { MD3Colors } from 'react-native-paper';
 import BottomSheet from '@gorhom/bottom-sheet';

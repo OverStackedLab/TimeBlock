@@ -1,39 +1,46 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, TextInput, Text, HelperText } from 'react-native-paper';
+import { Button, TextInput, HelperText } from 'react-native-paper';
 import { Image } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { setLoading, setError, signInSuccess } from '@/store/slices/authSlice';
+import { useForm, Controller } from 'react-hook-form';
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 const SignInScreen = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   // const { loading, error } = useAppSelector(state => state.auth);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  const handleSignIn = async () => {
+  const onSubmit = async (data: FormData) => {
     try {
       dispatch(setLoading(true));
-
-      // Add your authentication logic here
-      // For demo purposes, we'll just simulate an API call
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      if (email && password) {
-        dispatch(
-          signInSuccess({
-            email,
-            role: 'Administrator',
-          }),
-        );
-        router.replace('/(drawer)');
-      } else {
-        dispatch(setError('Please enter email and password'));
-      }
+      dispatch(
+        signInSuccess({
+          email: data.email,
+          role: 'Administrator',
+        }),
+      );
+      router.replace('/(drawer)');
     } catch (err) {
       dispatch(
         setError(err instanceof Error ? err.message : 'An error occurred'),
@@ -51,32 +58,71 @@ const SignInScreen = () => {
         />
       </View>
       <View style={styles.formContainer}>
-        <TextInput
-          label="Email"
-          value={email}
-          onChangeText={setEmail}
-          mode="outlined"
-          style={styles.input}
-          autoCapitalize="none"
-          // disabled={loading}
+        <Controller
+          control={control}
+          rules={{
+            required: 'Email is required',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: 'Invalid email address',
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <>
+              <TextInput
+                label="Email"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                mode="outlined"
+                style={styles.input}
+                autoCapitalize="none"
+                // disabled={loading}
+                error={!!errors.email}
+              />
+              {errors.email && (
+                <HelperText type="error">{errors.email.message}</HelperText>
+              )}
+            </>
+          )}
+          name="email"
         />
-        <TextInput
-          label="Password"
-          value={password}
-          onChangeText={setPassword}
-          mode="outlined"
-          style={styles.input}
-          secureTextEntry
-          // disabled={loading}
+
+        <Controller
+          control={control}
+          rules={{
+            required: 'Password is required',
+            minLength: {
+              value: 6,
+              message: 'Password must be at least 6 characters',
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <>
+              <TextInput
+                label="Password"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                mode="outlined"
+                style={styles.input}
+                secureTextEntry
+                // disabled={loading}
+                error={!!errors.password}
+              />
+              {errors.password && (
+                <HelperText type="error">{errors.password.message}</HelperText>
+              )}
+            </>
+          )}
+          name="password"
         />
-        {/* {error && (
-        <HelperText type="error" visible={!!error}>
-          {error}
-        </HelperText>
-      )} */}
+
+        {/* {error && <HelperText type="error">{error}</HelperText>} */}
+
         <Button
           mode="contained"
-          onPress={handleSignIn}
+          onPress={handleSubmit(onSubmit)}
           style={styles.button}
           buttonColor={theme.colors.brandPrimary}
           // loading={loading}
