@@ -12,7 +12,7 @@ import { useTheme } from '@react-navigation/native';
 import { Image, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Text } from 'react-native-paper';
 import { router } from 'expo-router';
-import { signOutSuccess } from '@/store/slices/authSlice';
+import { signOut } from '@/store/slices/authSlice';
 
 const DAY_OPTIONS = [1, 3, 5, 7];
 
@@ -26,8 +26,12 @@ export default function CustomDrawerContent(
   // const { user } = useAppSelector(state => state.auth);
 
   const handleLogout = async () => {
-    dispatch(signOutSuccess());
-    router.replace('/(auth)/sign-in');
+    try {
+      await dispatch(signOut()).unwrap();
+      router.replace('/sign-in');
+    } catch (error) {
+      console.error('Sign out failed:', error);
+    }
   };
 
   return (

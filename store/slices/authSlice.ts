@@ -1,11 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 
-interface AuthState {
-  user: FirebaseAuthTypes.User | null;
+type User = {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string;
+};
+
+type AuthState = {
+  user: User | null;
   loading: boolean;
   error: string | null;
-}
+};
 
 const initialState: AuthState = {
   user: null,
@@ -58,7 +65,13 @@ const authSlice = createSlice({
       })
       .addCase(signUp.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        const userData: User = {
+          uid: action.payload.uid,
+          email: action.payload.email || '',
+          displayName: action.payload.displayName || '',
+          photoURL: action.payload.photoURL || '',
+        };
+        state.user = userData;
       })
       .addCase(signUp.rejected, (state, action) => {
         state.loading = false;
@@ -70,7 +83,13 @@ const authSlice = createSlice({
       })
       .addCase(signIn.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        const userData: User = {
+          uid: action.payload.uid,
+          email: action.payload.email || '',
+          displayName: action.payload.displayName || '',
+          photoURL: action.payload.photoURL || '',
+        };
+        state.user = userData;
       })
       .addCase(signIn.rejected, (state, action) => {
         state.loading = false;
