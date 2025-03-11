@@ -3,12 +3,7 @@ import {
   DefaultTheme as NavigationDefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native';
-import {
-  adaptNavigationTheme,
-  PaperProvider,
-  MD3DarkTheme,
-  MD3LightTheme,
-} from 'react-native-paper';
+import { PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { useFonts } from 'expo-font';
 import { Slot, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -74,11 +69,10 @@ export default function RootLayout() {
       <PersistGate loading={null} persistor={persistor}>
         <PaperProvider theme={paperTheme}>
           <ThemeProvider value={paperTheme}>
-            {/* <Stack>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack> */}
-            <Slot />
+            </Stack>
           </ThemeProvider>
         </PaperProvider>
       </PersistGate>
