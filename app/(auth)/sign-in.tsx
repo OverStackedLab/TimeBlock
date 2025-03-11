@@ -1,13 +1,18 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Button, TextInput, HelperText } from 'react-native-paper';
-import { Image } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { router } from 'expo-router';
+import { Input, Button } from '@rneui/themed';
+import { useTheme } from '@rneui/themed';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { setLoading, setError, signInSuccess } from '@/store/slices/authSlice';
 import { useForm, Controller } from 'react-hook-form';
+import { signIn } from '@/store/slices/authSlice';
 
 type FormData = {
   email: string;
@@ -17,7 +22,7 @@ type FormData = {
 const SignInScreen = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  // const { loading, error } = useAppSelector(state => state.auth);
+  const { loading } = useAppSelector(state => state.auth);
   const {
     control,
     handleSubmit,
@@ -31,25 +36,19 @@ const SignInScreen = () => {
 
   const onSubmit = async (data: FormData) => {
     try {
-      dispatch(setLoading(true));
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      dispatch(
-        signInSuccess({
-          email: data.email,
-          role: 'Administrator',
-        }),
-      );
+      await dispatch(
+        signIn({ email: data.email, password: data.password }),
+      ).unwrap();
       router.replace('/(drawer)');
-    } catch (err) {
-      dispatch(
-        setError(err instanceof Error ? err.message : 'An error occurred'),
-      );
+    } catch (error) {
+      console.error('Sign in failed:', error);
     }
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
           source={require('@/assets/images/mytimeblock-logo.png')}
@@ -68,22 +67,18 @@ const SignInScreen = () => {
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <>
-              <TextInput
-                label="Email"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                mode="outlined"
-                style={styles.input}
-                autoCapitalize="none"
-                // disabled={loading}
-                error={!!errors.email}
-              />
-              {errors.email && (
-                <HelperText type="error">{errors.email.message}</HelperText>
-              )}
-            </>
+            <Input
+              placeholder="Email"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              disabled={loading}
+              errorMessage={errors.email?.message}
+              leftIcon={{ type: 'material', name: 'email' }}
+              containerStyle={styles.inputContainer}
+            />
           )}
           name="email"
         />
@@ -98,77 +93,74 @@ const SignInScreen = () => {
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <>
-              <TextInput
-                label="Password"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                mode="outlined"
-                style={styles.input}
-                secureTextEntry
-                // disabled={loading}
-                error={!!errors.password}
-              />
-              {errors.password && (
-                <HelperText type="error">{errors.password.message}</HelperText>
-              )}
-            </>
+            <Input
+              placeholder="Password"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              secureTextEntry
+              disabled={loading}
+              errorMessage={errors.password?.message}
+              leftIcon={{ type: 'material', name: 'lock' }}
+              containerStyle={styles.inputContainer}
+            />
           )}
           name="password"
         />
 
-        {/* {error && <HelperText type="error">{error}</HelperText>} */}
+        <Button
+          title="Sign In"
+          onPress={handleSubmit(onSubmit)}
+          loading={loading}
+          disabled={loading}
+          buttonStyle={[styles.button]}
+          containerStyle={styles.buttonContainer}
+        />
 
         <Button
-          mode="contained"
-          onPress={handleSubmit(onSubmit)}
-          style={styles.button}
-          buttonColor={theme.colors.brandPrimary}
-          // loading={loading}
-          // disabled={loading}
-        >
-          Sign In
-        </Button>
-        <Button
-          mode="text"
+          title="Don't have an account? Sign Up"
+          type="clear"
+          size="sm"
           onPress={() => router.push('/(auth)/sign-up')}
-          style={styles.button}
-          textColor={theme.colors.brandPrimary}
-          // disabled={loading}
-        >
-          Don't have an account? Sign Up
-        </Button>
+          disabled={loading}
+          containerStyle={styles.buttonContainer}
+        />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    justifyContent: 'center',
+    backgroundColor: '#fff',
   },
   logoContainer: {
     flex: 0.3,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 50,
   },
   formContainer: {
     flex: 0.7,
+    paddingHorizontal: 20,
     justifyContent: 'flex-start',
   },
   logo: {
     width: '90%',
     height: 60,
   },
-  input: {
-    marginBottom: 16,
+  inputContainer: {
+    paddingHorizontal: 0,
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    marginVertical: 5,
+    borderRadius: 8,
   },
   button: {
-    marginTop: 8,
     borderRadius: 8,
+    paddingVertical: 12,
   },
 });
 

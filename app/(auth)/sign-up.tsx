@@ -1,93 +1,220 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
-import { Image } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+import React from 'react';
+import {
+  StyleSheet,
+  View,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { router } from 'expo-router';
+import { Input, Button } from '@rneui/themed';
+import { useTheme } from '@rneui/themed';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { useAppSelector } from '@/hooks/useAppSelector';
+import { useForm, Controller } from 'react-hook-form';
+import { signUp } from '@/store/slices/authSlice';
+type FormData = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  fullName: string;
+};
 
-const SignUp = () => {
+const SignUpScreen = () => {
   const theme = useTheme();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const dispatch = useAppDispatch();
+  const { loading } = useAppSelector(state => state.auth);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<FormData>({
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      fullName: '',
+    },
+  });
 
-  const handleSignUp = () => {
-    // Add your sign-up logic here
-    // For now, we'll just redirect to the main app
-    router.replace('/(app)');
+  const password = watch('password');
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      await dispatch(
+        signUp({ email: data.email, password: data.password }),
+      ).unwrap();
+      router.replace('/(drawer)');
+    } catch (error) {
+      console.error('Sign up failed:', error);
+    }
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
-          source={require('../../assets/images/mytimeblock-logo.png')}
+          source={require('@/assets/images/mytimeblock-logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
       </View>
-      <TextInput
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        mode="outlined"
-        style={styles.input}
-        autoCapitalize="none"
-      />
-      <TextInput
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        mode="outlined"
-        style={styles.input}
-        secureTextEntry
-      />
-      <TextInput
-        label="Confirm Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        mode="outlined"
-        style={styles.input}
-        secureTextEntry
-      />
-      <Button
-        mode="contained"
-        onPress={handleSignUp}
-        style={styles.button}
-        buttonColor={theme.colors.brandPrimary}>
-        Sign Up
-      </Button>
-      <Button
-        mode="text"
-        onPress={() => router.push('/(auth)/sign-in')}
-        style={styles.button}
-        textColor={theme.colors.brandPrimary}>
-        Already have an account? Sign In
-      </Button>
-    </View>
+      <View style={styles.formContainer}>
+        <Controller
+          control={control}
+          rules={{
+            required: 'Full name is required',
+            minLength: {
+              value: 2,
+              message: 'Name must be at least 2 characters',
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              placeholder="Full Name"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="words"
+              disabled={loading}
+              errorMessage={errors.fullName?.message}
+              leftIcon={{ type: 'material', name: 'person' }}
+              containerStyle={styles.inputContainer}
+            />
+          )}
+          name="fullName"
+        />
+
+        <Controller
+          control={control}
+          rules={{
+            required: 'Email is required',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: 'Invalid email address',
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              placeholder="Email"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              disabled={loading}
+              errorMessage={errors.email?.message}
+              leftIcon={{ type: 'material', name: 'email' }}
+              containerStyle={styles.inputContainer}
+            />
+          )}
+          name="email"
+        />
+
+        <Controller
+          control={control}
+          rules={{
+            required: 'Password is required',
+            minLength: {
+              value: 6,
+              message: 'Password must be at least 6 characters',
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              placeholder="Password"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              secureTextEntry
+              disabled={loading}
+              errorMessage={errors.password?.message}
+              leftIcon={{ type: 'material', name: 'lock' }}
+              containerStyle={styles.inputContainer}
+            />
+          )}
+          name="password"
+        />
+
+        <Controller
+          control={control}
+          rules={{
+            required: 'Please confirm your password',
+            validate: value => value === password || 'Passwords do not match',
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              placeholder="Confirm Password"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              secureTextEntry
+              disabled={loading}
+              errorMessage={errors.confirmPassword?.message}
+              leftIcon={{ type: 'material', name: 'lock' }}
+              containerStyle={styles.inputContainer}
+            />
+          )}
+          name="confirmPassword"
+        />
+
+        <Button
+          title="Sign Up"
+          onPress={handleSubmit(onSubmit)}
+          loading={loading}
+          disabled={loading}
+          buttonStyle={[styles.button]}
+          containerStyle={styles.buttonContainer}
+        />
+
+        <Button
+          title="Already have an account? Sign In"
+          type="clear"
+          size="sm"
+          onPress={() => router.back()}
+          disabled={loading}
+          containerStyle={styles.buttonContainer}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    justifyContent: 'center',
+    backgroundColor: '#fff',
   },
   logoContainer: {
+    flex: 0.3,
     alignItems: 'center',
-    marginBottom: 40,
+    justifyContent: 'center',
+    paddingTop: 50,
+  },
+  formContainer: {
+    flex: 0.7,
+    paddingHorizontal: 20,
+    justifyContent: 'flex-start',
   },
   logo: {
-    width: '80%',
+    width: '90%',
     height: 60,
   },
-  input: {
-    marginBottom: 16,
+  inputContainer: {
+    paddingHorizontal: 0,
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    marginVertical: 5,
+    borderRadius: 8,
   },
   button: {
-    marginTop: 8,
+    borderRadius: 8,
+    paddingVertical: 12,
   },
 });
 
-export default SignUp;
+export default SignUpScreen;
