@@ -10,7 +10,7 @@ import {
   type SharedValue,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '@react-navigation/native';
+import { useTheme } from '@rneui/themed';
 
 type HeaderProps = {
   currentDate: SharedValue<string>;
@@ -18,7 +18,7 @@ type HeaderProps = {
 };
 
 const Header = ({ currentDate, onPressToday }: HeaderProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const navigation = useNavigation();
   const { top: safeTop } = useSafeAreaInsets();
   const [title, setTitle] = useState('');
@@ -49,7 +49,7 @@ const Header = ({ currentDate, onPressToday }: HeaderProps) => {
         styles.header,
         {
           paddingTop: safeTop + 16,
-          backgroundColor: theme.colors.brandPrimary,
+          backgroundColor: theme.colors.primary,
         },
       ]}>
       <StatusBar style="light" />

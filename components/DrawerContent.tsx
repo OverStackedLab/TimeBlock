@@ -1,17 +1,16 @@
 import React from 'react';
 import {
-  DrawerContentScrollView,
   type DrawerContentComponentProps,
+  DrawerContentScrollView,
 } from '@react-navigation/drawer';
+import { Image, StyleSheet, View, Text } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Avatar, ListItem, Icon, Button } from '@rneui/themed';
+import { router } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
-import { Drawer } from 'react-native-paper';
+import { setNumberOfDays } from '@/store/slices/calendarSlice';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { setNumberOfDays } from '@/store/slices/calendarSlice';
-import { useTheme } from '@react-navigation/native';
-import { Image, StyleSheet, View } from 'react-native';
-import { Avatar, Button, Text } from 'react-native-paper';
-import { router } from 'expo-router';
 import { signOut } from '@/store/slices/authSlice';
 
 const DAY_OPTIONS = [1, 3, 5, 7];
@@ -19,12 +18,10 @@ const DAY_OPTIONS = [1, 3, 5, 7];
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps,
 ) {
-  const theme = useTheme();
   const dispatch = useAppDispatch();
-  // const numberOfDays = useAppSelector(state => state.calendar.numberOfDays);
-  const numberOfDays = 3;
-  // const { user } = useAppSelector(state => state.auth);
-
+  const numberOfDays = useAppSelector(state => state.calendar.numberOfDays);
+  const { user } = useAppSelector(state => state.auth);
+  const { top: safeTop, bottom: safeBottom } = useSafeAreaInsets();
   const handleLogout = async () => {
     try {
       await dispatch(signOut()).unwrap();
@@ -35,122 +32,113 @@ export default function CustomDrawerContent(
   };
 
   return (
-    <DrawerContentScrollView {...props}>
-      <Drawer.Section style={styles.logoSection}>
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={[styles.header, { marginTop: safeTop }]}>
         <Image
           source={require('@/assets/images/mytimeblock-logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
-      </Drawer.Section>
-      <View style={styles.sidebar}>
-        <Drawer.Section style={styles.menuSection} showDivider={false}>
-          {DAY_OPTIONS.map(option => {
-            const icon =
-              option === 1
-                ? 'calendar-today'
-                : option === 3
-                ? 'calendar-range'
-                : option === 5
-                ? 'calendar-week'
-                : 'calendar-month';
-            return (
-              <Drawer.Item
-                key={option}
-                label={`${option} ${option === 1 ? 'Day' : 'Days'}`}
-                icon={icon}
-                active={option === numberOfDays || false}
-                onPress={() => {
-                  dispatch(setNumberOfDays(option));
-                  props.navigation.dispatch(DrawerActions.closeDrawer());
-                }}
-                theme={{
-                  colors: {
-                    secondaryContainer: theme.colors.brandPrimary, // background color
-                    onSecondaryContainer: theme.colors.white, // text color
-                  },
-                }}
-              />
-            );
-          })}
-        </Drawer.Section>
       </View>
-      <Drawer.Section style={styles.footer} showDivider={false}>
+      {/* List */}
+      <DrawerContentScrollView {...props} style={styles.drawerList}>
+        {DAY_OPTIONS.map((option, index) => {
+          const icon =
+            option === 1
+              ? 'calendar-today'
+              : option === 3
+              ? 'calendar-range'
+              : option === 5
+              ? 'calendar-week'
+              : 'calendar-month';
+          return (
+            <ListItem
+              key={`${option}-${index}`}
+              onPress={() => {
+                dispatch(setNumberOfDays(option));
+                props.navigation.dispatch(DrawerActions.closeDrawer());
+              }}
+              containerStyle={{
+                backgroundColor:
+                  numberOfDays === option ? '#f57c00' : 'transparent',
+              }}>
+              <Icon
+                name={icon}
+                type="material-community"
+                color={numberOfDays === option ? 'white' : 'grey'}
+              />
+              <ListItem.Content>
+                <ListItem.Title
+                  style={{
+                    color: numberOfDays === option ? 'white' : 'grey',
+                  }}>
+                  {`${option} ${option === 1 ? 'Day' : 'Days'}`}
+                </ListItem.Title>
+              </ListItem.Content>
+            </ListItem>
+          );
+        })}
+      </DrawerContentScrollView>
+      {/* Footer */}
+      <View style={[styles.footer, { marginBottom: safeBottom }]}>
         <View style={styles.userInfo}>
-          <Avatar.Icon
-            size={40}
-            icon="account"
-            color={theme.colors.white}
-            theme={{
-              colors: {
-                primary: theme.colors.brandPrimary,
-              },
-            }}
+          <Avatar
+            rounded
+            title={'OS'}
+            containerStyle={{ backgroundColor: '#c2c2c2' }}
           />
-          <View style={styles.userTextContainer}>
-            <Text style={styles.userEmail}>user@example.com</Text>
-            <Text style={styles.userRole}>Administrator</Text>
-          </View>
+          <Text style={styles.userName}>{user?.email}</Text>
         </View>
-
         <Button
-          mode="outlined"
-          icon="logout"
-          compact
-          uppercase
-          buttonColor={theme.colors.brandPrimary}
-          textColor={theme.colors.white}
+          title="Log Out"
           onPress={handleLogout}
-          style={styles.logoutButton}>
-          Log Out
-        </Button>
-      </Drawer.Section>
-    </DrawerContentScrollView>
+          buttonStyle={styles.logoutButton}
+          titleStyle={styles.logoutText}
+        />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  drawerContentContainer: {
-    flex: 1,
+  container: { flex: 1 },
+  header: {
+    padding: 14,
     flexDirection: 'row',
-  },
-  sidebar: {
-    height: '100%',
-  },
-  logoSection: {
-    flex: 1,
-    paddingBottom: 20,
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   logo: {
     width: '80%',
     height: 60,
   },
-  menuSection: {
-    marginBottom: 20,
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginLeft: 10,
   },
+  drawerList: { flex: 1 },
   footer: {
-    paddingHorizontal: 16,
-    marginBottom: 20,
+    paddingVertical: 20,
+    borderTopWidth: 1,
+    borderColor: '#ddd',
+    alignItems: 'center',
   },
   userInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 16,
+    gap: 10,
   },
-  userTextContainer: {
-    marginLeft: 12,
-  },
-  userEmail: {
-    fontSize: 14,
-    color: '#333',
-  },
-  userRole: {
-    fontSize: 12,
-    color: '#666',
-  },
+  userName: { fontSize: 16, fontWeight: 'bold' },
   logoutButton: {
-    marginTop: 8,
+    marginTop: 10,
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
   },
+  logoutText: { color: '#fff', fontWeight: 'bold' },
 });

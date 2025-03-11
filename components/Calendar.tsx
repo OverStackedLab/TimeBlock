@@ -12,8 +12,7 @@ import {
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { addEvent, updateEvent } from '@/store/slices/calendarSlice';
-import { useTheme } from '@react-navigation/native';
-import { MD3Colors } from 'react-native-paper';
+import { useTheme } from '@rneui/themed';
 import BottomSheet from '@gorhom/bottom-sheet';
 import EventBottomSheet from './EventBottomSheet';
 import Header from './Header';
@@ -41,17 +40,17 @@ export const INITIAL_DATE = new Date(
 const CALENDAR_THEME = {
   light: {
     colors: {
-      primary: '#ffa726',
-      onPrimary: MD3Colors.primary0,
-      background: MD3Colors.primary100,
-      onBackground: MD3Colors.primary0,
+      primary: '#f57c00',
+      onPrimary: '#fff',
+      background: '#fff',
+      onBackground: '#000',
       border: '#dadce0',
-      text: MD3Colors.primary0,
+      text: '#000',
       surface: '#ECECEC',
     },
-    nowIndicatorColor: MD3Colors.error50,
+    nowIndicatorColor: '#d32f2f',
     eventTitleStyle: {
-      color: MD3Colors.primary100,
+      color: '#fff',
     },
   },
 };
@@ -67,7 +66,7 @@ export default function Calendar() {
   const currentDate = useSharedValue(INITIAL_DATE);
   const calendarRef = useRef<CalendarKitHandle>(null);
   const dispatch = useAppDispatch();
-  const theme = useTheme();
+  const { theme } = useTheme();
   const [calendarWidth] = useState(Dimensions.get('window').width);
   const numberOfDays = useAppSelector(state => state.calendar.numberOfDays);
   const events = useAppSelector(state => state.calendar.events);
@@ -88,7 +87,7 @@ export default function Calendar() {
       ...event,
       id: generateId(),
       title: 'New Block',
-      color: theme.colors.brandPrimary,
+      color: theme.colors.primary,
       extendedProps: {
         description: '',
       },
@@ -117,13 +116,13 @@ export default function Calendar() {
           title: event.title || 'New Block',
           start: event.start,
           end: event.end,
-          color: event.color || theme.colors.brandPrimary,
+          color: event.color || theme.colors.primary,
         };
         dispatch(updateEvent(updatedEvent));
         setSelectedEvent(undefined);
       }
     },
-    [theme.colors.brandPrimary],
+    [theme.colors.primary],
   );
 
   return (
@@ -160,11 +159,11 @@ export default function Calendar() {
         <CalendarHeader />
         <CalendarBody />
       </CalendarContainer>
-      <EventBottomSheet
+      {/* <EventBottomSheet
         event={activeEvent}
         bottomSheetRef={bottomSheetRef}
         setSelectedEvent={setSelectedEvent}
-      />
+      /> */}
     </View>
   );
 }
