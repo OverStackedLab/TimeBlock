@@ -7,7 +7,7 @@ import {
   Platform,
 } from 'react-native';
 import { router } from 'expo-router';
-import { Input, Button } from '@rneui/themed';
+import { Input, Button, Text } from '@rneui/themed';
 import { useTheme } from '@rneui/themed';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
@@ -23,7 +23,7 @@ type FormData = {
 const SignUpScreen = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector(state => state.auth);
+  const { loading, error } = useAppSelector(state => state.auth);
   const {
     control,
     handleSubmit,
@@ -62,6 +62,7 @@ const SignUpScreen = () => {
           resizeMode="contain"
         />
       </View>
+      {error && <Text style={styles.error}>Sign up failed</Text>}
       <View style={styles.formContainer}>
         <Controller
           control={control}
@@ -214,6 +215,12 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 8,
     paddingVertical: 12,
+  },
+  error: {
+    color: '#ef4444',
+    textAlign: 'center',
+    marginBottom: 10,
+    fontSize: 20,
   },
 });
 

@@ -21,7 +21,7 @@ type FormData = {
 
 const SignInScreen = () => {
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector(state => state.auth);
+  const { loading, error } = useAppSelector(state => state.auth);
   const [showPassword, setShowPassword] = useState(false);
   const {
     control,
@@ -58,6 +58,7 @@ const SignInScreen = () => {
           resizeMode="contain"
         />
       </View>
+      {error && <Text style={styles.error}>Sign in failed</Text>}
       <View style={styles.formContainer}>
         <Controller
           control={control}
@@ -196,6 +197,12 @@ const styles = StyleSheet.create({
   bold: {
     fontWeight: 'bold',
     color: '#f57c00',
+  },
+  error: {
+    color: '#ef4444',
+    textAlign: 'center',
+    marginBottom: 10,
+    fontSize: 20,
   },
 });
 
