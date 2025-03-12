@@ -5,7 +5,7 @@ import {
   NativeSyntheticEvent,
   TextInputFocusEventData,
   Keyboard,
-  TextInput as RNTextInput,
+  TextInput as TextInput,
   Text,
   Modal,
 } from 'react-native';
@@ -23,6 +23,8 @@ import RNDateTimePicker, {
   IOSNativeProps,
 } from '@react-native-community/datetimepicker';
 import ColorPicker from './ColorPicker';
+import { useTheme } from '@rneui/themed';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type EventBottomSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet>;
@@ -36,6 +38,8 @@ export default function EventBottomSheet({
   setSelectedEvent,
 }: EventBottomSheetProps) {
   const dispatch = useAppDispatch();
+  const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
 
   const [eventTitle, setEventTitle] = useState(event?.title || '');
   const [eventDate, setEventDate] = useState(
@@ -43,7 +47,9 @@ export default function EventBottomSheet({
   );
   const [eventStartTime, setEventStartTime] = useState(event?.start?.dateTime);
   const [eventEndTime, setEventEndTime] = useState(event?.end.dateTime);
-  const [eventColor, setEventColor] = useState(event?.color || '#f57c00');
+  const [eventColor, setEventColor] = useState(
+    event?.color || theme.colors.primary,
+  );
   const [eventDescription, setEventDescription] = useState(
     event?.description || '',
   );
@@ -56,7 +62,7 @@ export default function EventBottomSheet({
   const [displayMode, setDisplayMode] =
     useState<IOSNativeProps['display']>('inline');
 
-  const snapPoints = useMemo(() => ['65%', '75%', '85%'], []);
+  const snapPoints = useMemo(() => ['65%' + insets.bottom, '75%', '85%'], []);
 
   useEffect(() => {
     if (event) {
@@ -66,7 +72,7 @@ export default function EventBottomSheet({
       );
       setEventStartTime(event.start.dateTime);
       setEventEndTime(event.end.dateTime);
-      setEventColor(event.color || '#f57c00');
+      setEventColor(event.color || theme.colors.primary);
       setEventDescription(event.description || '');
     }
   }, [event]);
@@ -136,8 +142,9 @@ export default function EventBottomSheet({
         enablePanDownToClose
         backdropComponent={renderBackdrop}
         backgroundStyle={{ backgroundColor: '#fafafa' }}>
-        <BottomSheetView style={styles.contentContainer}>
-          <View style={styles.section}>
+        <BottomSheetView
+          style={[styles.contentContainer, { paddingBottom: insets.bottom }]}>
+          <View style={[styles.section, { marginTop: 16, marginBottom: 4 }]}>
             <Input
               label="Block Title"
               value={eventTitle}
@@ -186,7 +193,7 @@ export default function EventBottomSheet({
               borderColor: '#000',
               padding: 8,
             }}>
-            <RNTextInput
+            <TextInput
               multiline={true}
               editable
               inputMode="text"
@@ -213,8 +220,15 @@ export default function EventBottomSheet({
             />
           </View>
           <View style={styles.buttonContainer}>
-            <Button onPress={handleUpdateEvent}>Save</Button>
-            <Button onPress={handleDeleteEvent}>Delete</Button>
+            <Button type="clear" onPress={handleUpdateEvent}>
+              Save
+            </Button>
+            <Button
+              type="clear"
+              titleStyle={{ color: theme.colors.error }}
+              onPress={handleDeleteEvent}>
+              Delete
+            </Button>
           </View>
         </BottomSheetView>
       </BottomSheet>
@@ -294,7 +308,6 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    // backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',

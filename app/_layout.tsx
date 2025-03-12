@@ -10,6 +10,7 @@ import { store, persistor } from '@/store';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { setUser } from '@/store/slices/authSlice';
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 

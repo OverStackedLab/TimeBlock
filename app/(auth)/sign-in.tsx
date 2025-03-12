@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,11 +7,12 @@ import {
   Platform,
 } from 'react-native';
 import { router } from 'expo-router';
-import { Input, Button } from '@rneui/themed';
+import { Input, Button, Text } from '@rneui/themed';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { useForm, Controller } from 'react-hook-form';
 import { signIn } from '@/store/slices/authSlice';
+import Snackbar from 'react-native-snackbar';
 
 type FormData = {
   email: string;
@@ -20,7 +21,8 @@ type FormData = {
 
 const SignInScreen = () => {
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector(state => state.auth);
+  const { loading } = useAppSelector(state => state.auth);
+  const [showPassword, setShowPassword] = useState(false);
   const {
     control,
     handleSubmit,
@@ -39,7 +41,9 @@ const SignInScreen = () => {
       ).unwrap();
       router.replace('/(drawer)');
     } catch (error) {
-      console.error('Sign in failed:', error);
+      Snackbar.show({
+        text: 'Sign in failed',
+      });
     }
   };
 
@@ -71,6 +75,7 @@ const SignInScreen = () => {
               onChangeText={onChange}
               value={value}
               autoCapitalize="none"
+              autoCorrect={false}
               keyboardType="email-address"
               disabled={loading}
               errorMessage={errors.email?.message}
@@ -96,10 +101,15 @@ const SignInScreen = () => {
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
-              secureTextEntry
+              secureTextEntry={!showPassword}
               disabled={loading}
               errorMessage={errors.password?.message}
               leftIcon={{ type: 'material', name: 'lock' }}
+              rightIcon={{
+                type: 'material',
+                name: showPassword ? 'visibility' : 'visibility-off',
+                onPress: () => setShowPassword(!showPassword),
+              }}
               containerStyle={styles.inputContainer}
             />
           )}
@@ -123,6 +133,20 @@ const SignInScreen = () => {
           disabled={loading}
           containerStyle={styles.buttonContainer}
         />
+
+        <Button
+          title="Forgot Password?"
+          type="clear"
+          size="sm"
+          onPress={() => router.push('/(auth)/forgot-password')}
+          disabled={loading}
+          containerStyle={styles.buttonContainer}
+        />
+      </View>
+      <View style={styles.footer}>
+        <Text>
+          Powered by <Text style={styles.bold}>OverStacked</Text>
+        </Text>
       </View>
     </KeyboardAvoidingView>
   );
@@ -159,6 +183,19 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 8,
     paddingVertical: 12,
+  },
+  link: {
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  footer: {
+    flex: 0.1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bold: {
+    fontWeight: 'bold',
+    color: '#f57c00',
   },
 });
 

@@ -12,6 +12,7 @@ import { setNumberOfDays } from '@/store/slices/calendarSlice';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { signOut } from '@/store/slices/authSlice';
+import Snackbar from 'react-native-snackbar';
 
 const DAY_OPTIONS = [1, 3, 5, 7];
 
@@ -27,7 +28,9 @@ export default function CustomDrawerContent(
       await dispatch(signOut()).unwrap();
       return <Redirect href="/sign-in" />;
     } catch (error) {
-      console.error('Sign out failed:', error);
+      Snackbar.show({
+        text: 'Sign out failed',
+      });
     }
   };
 
