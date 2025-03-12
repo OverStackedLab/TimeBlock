@@ -6,7 +6,7 @@ import {
 import { Image, StyleSheet, View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Avatar, ListItem, Icon, Button } from '@rneui/themed';
-import { router } from 'expo-router';
+import { Redirect } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import { setNumberOfDays } from '@/store/slices/calendarSlice';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
@@ -25,7 +25,7 @@ export default function CustomDrawerContent(
   const handleLogout = async () => {
     try {
       await dispatch(signOut()).unwrap();
-      router.replace('/sign-in');
+      return <Redirect href="/sign-in" />;
     } catch (error) {
       console.error('Sign out failed:', error);
     }
@@ -104,14 +104,13 @@ export default function CustomDrawerContent(
 const styles = StyleSheet.create({
   container: { flex: 1 },
   header: {
-    padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   logo: {
-    width: '80%',
-    height: 60,
+    width: '100%',
+    height: 76,
   },
   headerTitle: {
     fontSize: 20,

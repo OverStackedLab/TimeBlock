@@ -46,13 +46,15 @@ export default function RootLayout() {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(user => {
-      const userData = {
-        uid: user?.uid,
-        email: user?.email,
-        displayName: user?.displayName,
-        photoURL: user?.photoURL,
-      };
-      store.dispatch(setUser(userData));
+      if (user) {
+        const userData = {
+          uid: user?.uid,
+          email: user?.email,
+          displayName: user?.displayName,
+          photoURL: user?.photoURL,
+        };
+        store.dispatch(setUser(userData));
+      }
     });
     return subscriber; // unsubscribe on unmount
   }, []);

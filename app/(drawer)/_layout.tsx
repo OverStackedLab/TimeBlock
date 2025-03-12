@@ -2,14 +2,14 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Drawer } from 'expo-router/drawer';
 import DrawerContent from '@/components/DrawerContent';
 import { Redirect } from 'expo-router';
+import { useAppSelector } from '@/hooks/useAppSelector';
 
 export default function DrawerLayout() {
-  // const theme = useTheme();
-  // const { isAuthenticated } = useSession();
+  const { user } = useAppSelector(state => state.auth);
 
-  // if (!isAuthenticated) {
-  //   return <Redirect href="/sign-in" />;
-  // }
+  if (!user) {
+    return <Redirect href="/sign-in" />;
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

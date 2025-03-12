@@ -3,9 +3,11 @@ import auth from '@react-native-firebase/auth';
 
 type User = {
   uid: string;
-  email: string;
-  displayName: string;
-  photoURL: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+  emailVerified: boolean;
+  isAnonymous: boolean;
 };
 
 type AuthState = {
@@ -27,7 +29,16 @@ export const signUp = createAsyncThunk(
       email,
       password,
     );
-    return userCredential.user;
+    const user = {
+      uid: userCredential.user.uid,
+      email: userCredential.user.email,
+      displayName: userCredential.user.displayName,
+      photoURL: userCredential.user.photoURL,
+      emailVerified: userCredential.user.emailVerified,
+      isAnonymous: userCredential.user.isAnonymous,
+    };
+
+    return user;
   },
 );
 
@@ -38,7 +49,16 @@ export const signIn = createAsyncThunk(
       email,
       password,
     );
-    return userCredential.user;
+    const user = {
+      uid: userCredential.user.uid,
+      email: userCredential.user.email || '',
+      displayName: userCredential.user.displayName,
+      photoURL: userCredential.user.photoURL,
+      emailVerified: userCredential.user.emailVerified,
+      isAnonymous: userCredential.user.isAnonymous,
+    };
+
+    return user;
   },
 );
 
@@ -65,13 +85,7 @@ const authSlice = createSlice({
       })
       .addCase(signUp.fulfilled, (state, action) => {
         state.loading = false;
-        const userData: User = {
-          uid: action.payload.uid,
-          email: action.payload.email || '',
-          displayName: action.payload.displayName || '',
-          photoURL: action.payload.photoURL || '',
-        };
-        state.user = userData;
+        state.user = action.payload;
       })
       .addCase(signUp.rejected, (state, action) => {
         state.loading = false;
@@ -83,13 +97,7 @@ const authSlice = createSlice({
       })
       .addCase(signIn.fulfilled, (state, action) => {
         state.loading = false;
-        const userData: User = {
-          uid: action.payload.uid,
-          email: action.payload.email || '',
-          displayName: action.payload.displayName || '',
-          photoURL: action.payload.photoURL || '',
-        };
-        state.user = userData;
+        state.user = action.payload;
       })
       .addCase(signIn.rejected, (state, action) => {
         state.loading = false;
