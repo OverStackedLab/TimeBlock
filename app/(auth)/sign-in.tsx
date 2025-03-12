@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import { Input, Button } from '@rneui/themed';
-import { useTheme } from '@rneui/themed';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { useForm, Controller } from 'react-hook-form';
@@ -20,9 +19,8 @@ type FormData = {
 };
 
 const SignInScreen = () => {
-  const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector(state => state.auth);
+  const { loading, error } = useAppSelector(state => state.auth);
   const {
     control,
     handleSubmit,

@@ -7,19 +7,8 @@ import {
   Keyboard,
   TextInput as RNTextInput,
   Text,
-  // Button,
   Modal,
-  // Platform,
 } from 'react-native';
-// import {
-//   Text,
-//   Button,
-//   MD3Colors,
-//   Icon,
-//   TextInput,
-//   Modal,
-//   Portal,
-// } from 'react-native-paper';
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -29,7 +18,7 @@ import { EventItem } from '@howljs/calendar-kit';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { updateEvent, deleteEvent } from '@/store/slices/calendarSlice';
 import dayjs from 'dayjs';
-import { useTheme, Button } from '@rneui/themed';
+import { Button, Input, Icon, Dialog } from '@rneui/themed';
 import RNDateTimePicker, {
   IOSNativeProps,
 } from '@react-native-community/datetimepicker';
@@ -46,7 +35,6 @@ export default function EventBottomSheet({
   event,
   setSelectedEvent,
 }: EventBottomSheetProps) {
-  const { theme } = useTheme();
   const dispatch = useAppDispatch();
 
   const [eventTitle, setEventTitle] = useState(event?.title || '');
@@ -150,13 +138,10 @@ export default function EventBottomSheet({
         backgroundStyle={{ backgroundColor: '#fafafa' }}>
         <BottomSheetView style={styles.contentContainer}>
           <View style={styles.section}>
-            <RNTextInput
-              // label="Block Title"
+            <Input
+              label="Block Title"
               value={eventTitle}
               onChangeText={setEventTitle}
-              style={styles.input}
-              // underlineColor={theme.colors.secondary}
-              // activeUnderlineColor={theme.colors.brandPrimary}
               onFocus={_onFocus}
               onBlur={_onBlur}
               onSubmitEditing={_onSubmitEditing}
@@ -164,11 +149,7 @@ export default function EventBottomSheet({
           </View>
           <View style={styles.section}>
             <View style={styles.dateContainer}>
-              {/* <Icon
-                source="calendar"
-                size={24}
-                color={theme.colors.brandPrimary}
-              /> */}
+              <Icon name="calendar" type="material-community" size={24} />
               <Text
                 onPress={() => {
                   setMode('date');
@@ -232,86 +213,70 @@ export default function EventBottomSheet({
             />
           </View>
           <View style={styles.buttonContainer}>
-            <Button
-              // mode="text"
-              // icon="check"
-              onPress={handleUpdateEvent}
-              // labelStyle={{ fontSize: 20 }}
-              //  textColor={theme.colors.brandPrimary}
-            >
-              Save
-            </Button>
-            <Button
-              // mode="text"
-              // icon="delete"
-              // labelStyle={{ fontSize: 20 }}
-              onPress={handleDeleteEvent}
-              // textColor={theme.colors.brandPrimary}
-            >
-              Delete
-            </Button>
+            <Button onPress={handleUpdateEvent}>Save</Button>
+            <Button onPress={handleDeleteEvent}>Delete</Button>
           </View>
         </BottomSheetView>
       </BottomSheet>
-      {/* <Portal>
-        <Modal
-          visible={show}
-          onDismiss={() => setShow(false)}
-          contentContainerStyle={{
-            backgroundColor: 'white',
-            padding: 18,
-            marginHorizontal: 16,
-            borderRadius: 8,
-          }}>
-          <RNDateTimePicker
-            value={date}
-            mode={mode}
-            display={displayMode}
-            onChange={(_, selectedDate) => {
-              if (mode === 'date') {
-                if (selectedDate) {
-                  setEventDate(selectedDate);
-                }
-              }
-              if (mode === 'time' && timePickerType === 'start') {
-                if (selectedDate) {
-                  setEventStartTime(selectedDate);
-                }
-              }
-              if (mode === 'time' && timePickerType === 'end') {
-                if (selectedDate) {
-                  setEventEndTime(selectedDate);
-                }
-              }
-            }}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              gap: 8,
-              marginTop: 16,
-            }}>
-            <Button
-              mode="text"
-              onPress={() => {
-                setShow(false);
-                if (date) {
-                  setEventDate(date);
-                }
-              }}
-              textColor={theme.colors.brandPrimary}>
-              OK
-            </Button>
-            <Button
-              mode="text"
-              onPress={() => setShow(false)}
-              textColor={theme.colors.brandPrimary}>
-              CLOSE
-            </Button>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={show}
+        onRequestClose={() => {
+          setShow(false);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View
+              style={{
+                backgroundColor: 'white',
+                padding: 16,
+                borderRadius: 4,
+              }}>
+              <RNDateTimePicker
+                value={date}
+                mode={mode}
+                display={displayMode}
+                onChange={(_, selectedDate) => {
+                  if (mode === 'date') {
+                    if (selectedDate) {
+                      setEventDate(selectedDate);
+                    }
+                  }
+                  if (mode === 'time' && timePickerType === 'start') {
+                    if (selectedDate) {
+                      setEventStartTime(selectedDate);
+                    }
+                  }
+                  if (mode === 'time' && timePickerType === 'end') {
+                    if (selectedDate) {
+                      setEventEndTime(selectedDate);
+                    }
+                  }
+                }}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                  gap: 8,
+                  marginTop: 16,
+                }}>
+                <Button
+                  onPress={() => {
+                    setShow(false);
+                    if (date) {
+                      setEventDate(date);
+                    }
+                  }}>
+                  OK
+                </Button>
+                <Button onPress={() => setShow(false)}>CLOSE</Button>
+              </View>
+            </View>
           </View>
-        </Modal>
-      </Portal> */}
+        </View>
+      </Modal>
     </>
   );
 }
@@ -320,6 +285,27 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     paddingHorizontal: 36,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    // backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   input: {
     backgroundColor: '#fafafa',
