@@ -6,17 +6,20 @@ import {
   TextInputFocusEventData,
   Keyboard,
   TextInput as RNTextInput,
-  Platform,
-} from 'react-native';
-import {
   Text,
-  Button,
-  MD3Colors,
-  Icon,
-  TextInput,
+  // Button,
   Modal,
-  Portal,
-} from 'react-native-paper';
+  // Platform,
+} from 'react-native';
+// import {
+//   Text,
+//   Button,
+//   MD3Colors,
+//   Icon,
+//   TextInput,
+//   Modal,
+//   Portal,
+// } from 'react-native-paper';
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -26,7 +29,7 @@ import { EventItem } from '@howljs/calendar-kit';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { updateEvent, deleteEvent } from '@/store/slices/calendarSlice';
 import dayjs from 'dayjs';
-import { useTheme } from '@react-navigation/native';
+import { useTheme, Button } from '@rneui/themed';
 import RNDateTimePicker, {
   IOSNativeProps,
 } from '@react-native-community/datetimepicker';
@@ -43,7 +46,7 @@ export default function EventBottomSheet({
   event,
   setSelectedEvent,
 }: EventBottomSheetProps) {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const dispatch = useAppDispatch();
 
   const [eventTitle, setEventTitle] = useState(event?.title || '');
@@ -147,13 +150,13 @@ export default function EventBottomSheet({
         backgroundStyle={{ backgroundColor: '#fafafa' }}>
         <BottomSheetView style={styles.contentContainer}>
           <View style={styles.section}>
-            <TextInput
-              label="Block Title"
+            <RNTextInput
+              // label="Block Title"
               value={eventTitle}
               onChangeText={setEventTitle}
               style={styles.input}
-              underlineColor={theme.colors.secondary}
-              activeUnderlineColor={theme.colors.brandPrimary}
+              // underlineColor={theme.colors.secondary}
+              // activeUnderlineColor={theme.colors.brandPrimary}
               onFocus={_onFocus}
               onBlur={_onBlur}
               onSubmitEditing={_onSubmitEditing}
@@ -161,11 +164,11 @@ export default function EventBottomSheet({
           </View>
           <View style={styles.section}>
             <View style={styles.dateContainer}>
-              <Icon
+              {/* <Icon
                 source="calendar"
                 size={24}
                 color={theme.colors.brandPrimary}
-              />
+              /> */}
               <Text
                 onPress={() => {
                   setMode('date');
@@ -230,25 +233,27 @@ export default function EventBottomSheet({
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              mode="text"
-              icon="check"
+              // mode="text"
+              // icon="check"
               onPress={handleUpdateEvent}
-              labelStyle={{ fontSize: 20 }}
-              textColor={theme.colors.brandPrimary}>
+              // labelStyle={{ fontSize: 20 }}
+              //  textColor={theme.colors.brandPrimary}
+            >
               Save
             </Button>
             <Button
-              mode="text"
-              icon="delete"
-              labelStyle={{ fontSize: 20 }}
+              // mode="text"
+              // icon="delete"
+              // labelStyle={{ fontSize: 20 }}
               onPress={handleDeleteEvent}
-              textColor={theme.colors.brandPrimary}>
+              // textColor={theme.colors.brandPrimary}
+            >
               Delete
             </Button>
           </View>
         </BottomSheetView>
       </BottomSheet>
-      <Portal>
+      {/* <Portal>
         <Modal
           visible={show}
           onDismiss={() => setShow(false)}
@@ -306,7 +311,7 @@ export default function EventBottomSheet({
             </Button>
           </View>
         </Modal>
-      </Portal>
+      </Portal> */}
     </>
   );
 }
