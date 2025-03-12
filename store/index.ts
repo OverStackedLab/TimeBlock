@@ -8,7 +8,7 @@ const persistConfig = {
   key: 'root',
   version: 0.1,
   storage: AsyncStorage,
-  whitelist: ['auth', 'calendar'],
+  whitelist: ['user', 'calendar'],
 };
 
 const rootReducer = combineReducers({

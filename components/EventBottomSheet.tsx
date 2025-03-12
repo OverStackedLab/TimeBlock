@@ -259,12 +259,12 @@ export default function EventBottomSheet({
                   }
                   if (mode === 'time' && timePickerType === 'start') {
                     if (selectedDate) {
-                      setEventStartTime(selectedDate);
+                      setEventStartTime(selectedDate.toISOString());
                     }
                   }
                   if (mode === 'time' && timePickerType === 'end') {
                     if (selectedDate) {
-                      setEventEndTime(selectedDate);
+                      setEventEndTime(selectedDate.toISOString());
                     }
                   }
                 }}
