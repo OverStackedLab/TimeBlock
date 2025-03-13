@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
     borderRadius: 5,
-    width: '100%',
+    width: '90%',
     alignItems: 'center',
   },
-  logoutText: { color: '#fff', fontWeight: 'bold' },
+  logoutText: { color: '#fff', fontWeight: 'bold', width: '100%' },
 });
