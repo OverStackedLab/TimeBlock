@@ -171,6 +171,9 @@ export default function EventBottomSheet({
                   setMode('time');
                   setDisplayMode('spinner');
                   setShow(true);
+                  if (eventStartTime) {
+                    setDate(new Date(eventStartTime));
+                  }
                 }}>
                 {dayjs(eventStartTime).format('h:mm A')} -
               </Text>
@@ -180,6 +183,9 @@ export default function EventBottomSheet({
                   setMode('time');
                   setDisplayMode('spinner');
                   setShow(true);
+                  if (eventEndTime) {
+                    setDate(new Date(eventEndTime));
+                  }
                 }}>
                 {dayjs(eventEndTime).format('h:mm A')}
               </Text>
@@ -251,6 +257,7 @@ export default function EventBottomSheet({
                 value={date}
                 mode={mode}
                 display={displayMode}
+                minuteInterval={5}
                 onChange={(_, selectedDate) => {
                   if (mode === 'date') {
                     if (selectedDate) {
@@ -260,11 +267,13 @@ export default function EventBottomSheet({
                   if (mode === 'time' && timePickerType === 'start') {
                     if (selectedDate) {
                       setEventStartTime(selectedDate.toISOString());
+                      setDate(selectedDate);
                     }
                   }
                   if (mode === 'time' && timePickerType === 'end') {
                     if (selectedDate) {
                       setEventEndTime(selectedDate.toISOString());
+                      setDate(selectedDate);
                     }
                   }
                 }}

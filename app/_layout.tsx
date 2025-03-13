@@ -25,7 +25,6 @@ function LoadingScreen() {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  console.log('🚀 ~ RootLayout ~ colorScheme:', colorScheme);
   theme.mode = colorScheme === 'dark' ? 'dark' : 'light';
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
