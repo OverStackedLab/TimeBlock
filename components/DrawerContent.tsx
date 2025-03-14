@@ -13,7 +13,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { signOut } from '@/store/slices/authSlice';
 import Snackbar from 'react-native-snackbar';
-
+import { useTheme } from '@rneui/themed';
 const DAY_OPTIONS = [1, 3, 5, 7];
 
 export default function CustomDrawerContent(
@@ -22,6 +22,7 @@ export default function CustomDrawerContent(
   const dispatch = useAppDispatch();
   const numberOfDays = useAppSelector(state => state.calendar.numberOfDays);
   const { user } = useAppSelector(state => state.auth);
+  const { theme } = useTheme();
   const { top: safeTop, bottom: safeBottom } = useSafeAreaInsets();
   const handleLogout = async () => {
     try {
@@ -64,7 +65,9 @@ export default function CustomDrawerContent(
               }}
               containerStyle={{
                 backgroundColor:
-                  numberOfDays === option ? '#f57c00' : 'transparent',
+                  numberOfDays === option
+                    ? theme.colors.primary
+                    : 'transparent',
               }}>
               <Icon
                 name={icon}
@@ -88,8 +91,8 @@ export default function CustomDrawerContent(
         <View style={styles.userInfo}>
           <Avatar
             rounded
-            title={'OS'}
-            containerStyle={{ backgroundColor: '#c2c2c2' }}
+            title={user?.email?.slice(0, 1).toUpperCase()}
+            containerStyle={{ backgroundColor: theme.colors.grey5 }}
           />
           <Text style={styles.userName}>{user?.email}</Text>
         </View>
@@ -139,8 +142,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
     borderRadius: 5,
-    width: '90%',
     alignItems: 'center',
+    marginHorizontal: 10,
   },
-  logoutText: { color: '#fff', fontWeight: 'bold', width: '100%' },
+  logoutText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    width: '100%',
+    textAlign: 'center',
+  },
 });
