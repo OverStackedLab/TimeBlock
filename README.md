@@ -6,7 +6,7 @@ making time management more effective and visual.
 
 | ![login](demo/login.png) | ![calendar](demo/calendar.png) | ![editor](demo/block-editor-keyboard.png) |
 |------------------------|------------------------|------------------------|
-| Login             | Creds             | Caption 3              | 
+| Login                  | Creds                  | Editor                 | 
 
 
 
