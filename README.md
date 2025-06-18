@@ -1,58 +1,245 @@
-# Welcome to My TimeBlock 👋
+# TimeBlock 📅⏰
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern and intuitive time-blocking calendar application built with React Native and Expo. 
+TimeBlock helps you organize your schedule by creating visual time blocks for your events and tasks, 
+making time management more effective and visual.
 
-## Get started
+| ![login](demo/login.png) | ![calendar](demo/calendar.png) | ![editor](demo/block-editor-keyboard.png) |
+|------------------------|------------------------|------------------------|
+| Login             | Creds             | Caption 3              | 
 
-1. Install dependencies
 
+
+## ✨ Features
+
+### 📱 **Cross-Platform Support**
+- iOS, Android, and Web compatibility
+- Native performance with React Native
+- Responsive design for various screen sizes
+
+### 🔐 **Authentication System**
+- Email/password authentication via Firebase
+- User account management
+- Password recovery functionality
+- Secure session management with Redux Persist
+
+### 📅 **Calendar Management**
+- Dynamic calendar views (single, double, or triple column layouts)
+- Interactive time-blocking interface
+- Event creation, editing, and deletion
+- Calendar permissions integration
+- Real-time event synchronization
+
+### 🎨 **Modern UI/UX**
+- Material Design components with React Native Paper
+- Themed interface with dark/light mode support
+- Bottom sheet modals for event details
+- Smooth animations with Reanimated
+- Custom drawer navigation
+
+### 🛡️ **Reliability & Performance**
+- Firebase Crashlytics integration
+- Redux state management
+- Optimized rendering with FlashList
+- Gesture handling for better UX
+
+## 🛠️ Tech Stack
+
+### **Frontend**
+- **React Native** 0.76.6 - Cross-platform mobile development
+- **Expo** ~52.0.33 - Development platform and build tools
+- **TypeScript** - Type safety and better development experience
+- **Expo Router** - File-based navigation system
+
+### **State Management**
+- **Redux Toolkit** - Predictable state container
+- **React Redux** - React bindings for Redux
+- **Redux Persist** - State persistence
+
+### **UI Libraries**
+- **React Native Paper** - Material Design components
+- **React Native Elements** - Additional UI components
+- **@howljs/calendar-kit** - Advanced calendar components
+- **@gorhom/bottom-sheet** - Native bottom sheet modals
+
+### **Backend & Services**
+- **Firebase Authentication** - User authentication
+- **Firebase Crashlytics** - Crash reporting and analytics
+- **AsyncStorage** - Local data persistence
+
+### **Development Tools**
+- **Jest** - Testing framework
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **React Hook Form** - Form management
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18 or later)
+- npm or yarn
+- Expo CLI
+- iOS Simulator (for iOS development)
+- Android Studio & Android Emulator (for Android development)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/TimeBlock.git
+   cd TimeBlock
+   ```
+
+2. **Install dependencies**
    ```bash
    npm install
+   # or
+   yarn install
    ```
 
-2. Start the app
+3. **Set up Firebase**
+   - Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
+   - Enable Authentication and Crashlytics
+   - Download `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)
+   - Place them in the project root directory
 
+4. **Start the development server**
    ```bash
-   $ npx expo start
+   npx expo start
    ```
 
-   ```bash
-   $ npx expo run:ios
-   ```
-
-   ```bash
-   $ npx expo run:android
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### Running on Different Platforms
 
 ```bash
+# Run on iOS Simulator
+npx expo run:ios
+
+# Run on Android Emulator  
+npx expo run:android
+
+# Run on Web
+npx expo start --web
+```
+
+## 📱 Platform-Specific Setup
+
+### iOS Setup
+- Requires Xcode for iOS development
+- CocoaPods dependencies are automatically managed
+- Uses static frameworks for better compatibility
+
+### Android Setup
+- Requires Android Studio
+- Minimum SDK version: 21
+- Target SDK version: 34
+- Calendar permissions are automatically requested
+
+## 🏗️ Project Structure
+
+```
+TimeBlock/
+├── app/                    # App screens and navigation
+│   ├── (auth)/            # Authentication screens
+│   │   ├── sign-in.tsx
+│   │   ├── sign-up.tsx
+│   │   └── forgot-password.tsx
+│   └── (drawer)/          # Main app screens
+├── components/            # Reusable UI components
+│   ├── Calendar.tsx       # Main calendar component
+│   ├── EventBottomSheet.tsx
+│   ├── ColorPicker.tsx
+│   └── icons/             # Custom icon components
+├── store/                 # Redux store configuration
+│   ├── index.ts           # Store setup
+│   └── slices/            # Redux slices
+│       ├── authSlice.ts   # Authentication state
+│       └── calendarSlice.ts # Calendar state
+├── hooks/                 # Custom React hooks
+├── constants/             # App constants and colors
+├── types/                 # TypeScript type definitions
+└── assets/                # Images, fonts, and static assets
+```
+
+## 🔧 Available Scripts
+
+```bash
+# Start development server
+npm start
+
+# Run linting
+npm run lint
+
+# Fix linting issues
+npm run lint:fix
+
+# Format code
+npm run format
+
+# Run tests
+npm test
+
+# Reset project (removes example code)
 npm run reset-project
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🧪 Testing
 
-## Learn more
+The project uses Jest for testing with Expo's testing configuration:
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npm test
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 📦 Building for Production
 
-## Join the community
+### Using EAS Build (Recommended)
+```bash
+# Install EAS CLI
+npm install -g @expo/eas-cli
 
-Join our community of developers creating universal apps.
+# Build for iOS
+eas build --platform ios
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+# Build for Android
+eas build --platform android
+```
+
+### Local Builds
+```bash
+# Build locally for iOS
+npx expo run:ios --configuration Release
+
+# Build locally for Android
+npx expo run:android --variant release
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+If you encounter any issues or have questions:
+
+1. Check the [Issues](https://github.com/your-username/TimeBlock/issues) page
+2. Create a new issue with a detailed description
+3. For urgent matters, contact [admin@mytimeblock.com]
+
+## 🙏 Acknowledgments
+
+- [Expo Team](https://expo.dev) for the amazing development platform
+- [React Native Community](https://reactnative.dev) for the robust framework
+- [Firebase](https://firebase.google.com) for backend services
+- All the open-source contributors who made this project possible
+
+---
+
+Built with ❤️ using React Native and Expo
