@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.overstacked.TimeBlock",
+      "bundleIdentifier": "com.overstacked.timeblock",
       "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
@@ -28,7 +28,7 @@
         "android.permission.WRITE_CALENDAR"
       ],
       "googleServicesFile": "./google-services.json",
-      "package": "com.overstacked.TimeBlock"
+      "package": "com.overstacked.timeblock"
     },
     "web": {
       "bundler": "metro",

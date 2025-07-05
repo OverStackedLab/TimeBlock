@@ -19,7 +19,7 @@ export const theme = createTheme({
   },
   darkColors: {
     primary: '#f57c00',
-    secondary: '#60a5fa',
+    secondary: '#f57c00',
     background: '#111827',
     white: '#ffffff',
     black: '#000000',

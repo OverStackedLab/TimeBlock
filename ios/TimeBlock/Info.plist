@@ -28,13 +28,13 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>timeblock</string>
-          <string>com.overstacked.TimeBlock</string>
+          <string>com.overstacked.timeblock</string>
         </array>
       </dict>
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.googleusercontent.apps.48901059663-b700cjvigddptst6ubvknpojg8gg38mm</string>
+          <string>com.googleusercontent.apps.48901059663-02mq52g2l3ht8sk916u083ik0vgaf3le</string>
         </array>
       </dict>
       <dict>

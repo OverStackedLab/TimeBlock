@@ -1,8 +1,8 @@
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Drawer } from 'expo-router/drawer';
 import DrawerContent from '@/components/DrawerContent';
-import { Redirect } from 'expo-router';
 import { useAppSelector } from '@/hooks/useAppSelector';
+import { Redirect } from 'expo-router';
+import { Drawer } from 'expo-router/drawer';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function DrawerLayout() {
   const { user } = useAppSelector(state => state.auth);
@@ -19,7 +19,7 @@ export default function DrawerLayout() {
         }}
         drawerContent={props => <DrawerContent {...props} />}>
         <Drawer.Screen
-          name="index"
+          name="(tabs)"
           options={{
             drawerLabel: 'Home',
             title: 'overview',
