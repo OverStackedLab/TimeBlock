@@ -39,7 +39,7 @@ const SignInScreen = () => {
       await dispatch(
         signIn({ email: data.email, password: data.password }),
       ).unwrap();
-      router.replace('/(drawer)');
+      router.replace('/');
     } catch (error) {
       Snackbar.show({
         text: 'Sign in failed',

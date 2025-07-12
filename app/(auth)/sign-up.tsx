@@ -1,6 +1,6 @@
 import { useAppDispatch } from '@hooks/useAppDispatch';
 import { useAppSelector } from '@hooks/useAppSelector';
-import { Button, Input, Text, useTheme } from '@rneui/themed';
+import { Button, Input, Text } from '@rneui/themed';
 import { signUp } from '@store/slices/authSlice';
 import { router } from 'expo-router';
 import React from 'react';
@@ -20,7 +20,6 @@ type FormData = {
 };
 
 const SignUpScreen = () => {
-  const theme = useTheme();
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector(state => state.auth);
   const {

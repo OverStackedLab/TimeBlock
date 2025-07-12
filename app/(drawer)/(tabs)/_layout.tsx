@@ -1,7 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useColorScheme } from '@hooks/useColorScheme';
 import { useTheme } from '@rneui/themed';
-import { Tabs } from 'expo-router';
+import { router, Tabs } from 'expo-router';
+import { TouchableOpacity } from 'react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -30,7 +31,26 @@ export default function TabLayout() {
       <Tabs.Screen
         name="pomodoro"
         options={{
-          title: 'Pomodoro',
+          headerShown: true,
+          headerTitle: 'Un Pomodoro',
+          headerStyle: {
+            backgroundColor: theme.colors.primary,
+            height: 115,
+          },
+          headerTitleStyle: {
+            color: theme.colors.white,
+          },
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{ marginLeft: 5 }}>
+              <MaterialCommunityIcons
+                name="menu"
+                size={24}
+                color={theme.colors.white}
+              />
+            </TouchableOpacity>
+          ),
           tabBarIcon: ({ color }) => {
             return (
               <MaterialCommunityIcons

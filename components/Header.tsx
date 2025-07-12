@@ -1,16 +1,16 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { DrawerActions } from '@react-navigation/native';
+import { useTheme } from '@rneui/themed';
+import { useNavigation } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { DrawerActions } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import { useNavigation } from 'expo-router';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   runOnJS,
   useAnimatedReaction,
   type SharedValue,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '@rneui/themed';
 
 type HeaderProps = {
   currentDate: SharedValue<string>;
@@ -82,13 +82,12 @@ const Header = ({ currentDate, onPressToday }: HeaderProps) => {
   );
 };
 
-export default Header;
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: 16,
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
   },
   menuBtn: { paddingRight: 12 },
   headerRightContent: {
@@ -99,3 +98,5 @@ const styles = StyleSheet.create({
   },
   headerTitle: { flexGrow: 1, flexShrink: 1, fontSize: 16, fontWeight: '500' },
 });
+
+export default Header;
