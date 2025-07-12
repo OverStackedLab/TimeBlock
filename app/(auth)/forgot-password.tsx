@@ -1,14 +1,14 @@
+import { Button, Input } from '@rneui/themed';
+import { router } from 'expo-router';
 import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import {
-  StyleSheet,
-  View,
   Image,
   KeyboardAvoidingView,
   Platform,
+  StyleSheet,
+  View,
 } from 'react-native';
-import { router } from 'expo-router';
-import { Input, Button } from '@rneui/themed';
-import { useForm, Controller } from 'react-hook-form';
 
 type FormData = {
   email: string;
@@ -42,7 +42,7 @@ const ForgotPasswordScreen = () => {
       style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
-          source={require('@/assets/images/mytimeblock-logo.png')}
+          source={require('@assets/images/mytimeblock-logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />

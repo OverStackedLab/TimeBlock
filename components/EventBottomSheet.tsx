@@ -1,30 +1,29 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  NativeSyntheticEvent,
-  TextInputFocusEventData,
-  Keyboard,
-  TextInput as TextInput,
-  Text,
-  Modal,
-} from 'react-native';
 import BottomSheet, {
-  BottomSheetView,
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
+  BottomSheetView,
 } from '@gorhom/bottom-sheet';
+import { useAppDispatch } from '@hooks/useAppDispatch';
 import { EventItem } from '@howljs/calendar-kit';
-import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { updateEvent, deleteEvent } from '@/store/slices/calendarSlice';
-import dayjs from 'dayjs';
-import { Button, Input, Icon, Dialog } from '@rneui/themed';
 import RNDateTimePicker, {
   IOSNativeProps,
 } from '@react-native-community/datetimepicker';
-import ColorPicker from './ColorPicker';
-import { useTheme } from '@rneui/themed';
+import { Button, Icon, Input, useTheme } from '@rneui/themed';
+import { deleteEvent, updateEvent } from '@store/slices/calendarSlice';
+import dayjs from 'dayjs';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  Keyboard,
+  Modal,
+  NativeSyntheticEvent,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputFocusEventData,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ColorPicker from './ColorPicker';
 
 type EventBottomSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet>;

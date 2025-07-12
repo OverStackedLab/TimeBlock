@@ -1,17 +1,21 @@
-import 'react-native-reanimated';
-import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
-import { Stack } from 'expo-router';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
+import auth from '@react-native-firebase/auth';
 import { ThemeProvider } from '@rneui/themed';
+import { persistor, store } from '@store';
+import { setUser } from '@store/slices/authSlice';
+import { theme } from '@theme';
+import { useFonts } from 'expo-font';
+import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  useColorScheme,
+  View,
+} from 'react-native';
+import 'react-native-reanimated';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { store, persistor } from '@/store';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import auth from '@react-native-firebase/auth';
-import { setUser } from '@/store/slices/authSlice';
-import { theme } from '@/theme';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 

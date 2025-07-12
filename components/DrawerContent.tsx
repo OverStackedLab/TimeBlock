@@ -1,19 +1,18 @@
-import React from 'react';
+import { useAppDispatch } from '@hooks/useAppDispatch';
+import { useAppSelector } from '@hooks/useAppSelector';
 import {
   type DrawerContentComponentProps,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
-import { Image, StyleSheet, View, Text } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Avatar, ListItem, Icon, Button } from '@rneui/themed';
-import { Redirect } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
-import { setNumberOfDays } from '@/store/slices/calendarSlice';
-import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { useAppSelector } from '@/hooks/useAppSelector';
-import { signOut } from '@/store/slices/authSlice';
+import { Avatar, Button, Icon, ListItem, useTheme } from '@rneui/themed';
+import { signOut } from '@store/slices/authSlice';
+import { setNumberOfDays } from '@store/slices/calendarSlice';
+import { Redirect } from 'expo-router';
+import React from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Snackbar from 'react-native-snackbar';
-import { useTheme } from '@rneui/themed';
 const DAY_OPTIONS = [1, 3, 5, 7];
 
 export default function CustomDrawerContent(
@@ -40,7 +39,7 @@ export default function CustomDrawerContent(
       {/* Header */}
       <View style={[styles.header, { marginTop: safeTop }]}>
         <Image
-          source={require('@/assets/images/mytimeblock-logo.png')}
+          source={require('@assets/images/mytimeblock-logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />

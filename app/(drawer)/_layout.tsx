@@ -1,5 +1,5 @@
-import DrawerContent from '@/components/DrawerContent';
-import { useAppSelector } from '@/hooks/useAppSelector';
+import DrawerContent from '@components/DrawerContent';
+import { useAppSelector } from '@hooks/useAppSelector';
 import { Redirect } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';

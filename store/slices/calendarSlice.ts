@@ -1,6 +1,6 @@
-import { RootState } from '@/store';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { EventItem } from '@howljs/calendar-kit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '@store';
 
 type CalendarState = {
   numberOfDays: number;

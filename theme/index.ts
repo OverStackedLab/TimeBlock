@@ -1,5 +1,8 @@
 import { createTheme } from '@rneui/themed';
 
+const tintColorLight = '#f57c00';
+const tintColorDark = '#fff';
+
 export const theme = createTheme({
   lightColors: {
     primary: '#f57c00',
@@ -16,6 +19,7 @@ export const theme = createTheme({
     success: '#22c55e',
     warning: '#f59e0b',
     error: '#ef4444',
+    tint: tintColorLight,
   },
   darkColors: {
     primary: '#f57c00',
@@ -32,6 +36,7 @@ export const theme = createTheme({
     success: '#22c55e',
     warning: '#f59e0b',
     error: '#ef4444',
+    tint: tintColorDark,
   },
   mode: 'dark',
 });

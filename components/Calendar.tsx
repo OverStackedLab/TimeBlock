@@ -1,5 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { Dimensions, View } from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { useAppDispatch } from '@hooks/useAppDispatch';
+import { useAppSelector } from '@hooks/useAppSelector';
 import {
   CalendarBody,
   CalendarContainer,
@@ -9,14 +10,13 @@ import {
   OnCreateEventResponse,
   SelectedEventType,
 } from '@howljs/calendar-kit';
-import { useAppSelector } from '@/hooks/useAppSelector';
-import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { addEvent, updateEvent } from '@/store/slices/calendarSlice';
 import { useTheme } from '@rneui/themed';
-import BottomSheet from '@gorhom/bottom-sheet';
+import { addEvent, updateEvent } from '@store/slices/calendarSlice';
+import React, { useCallback, useRef, useState } from 'react';
+import { Dimensions, View } from 'react-native';
+import { useSharedValue } from 'react-native-reanimated';
 import EventBottomSheet from './EventBottomSheet';
 import Header from './Header';
-import { useSharedValue } from 'react-native-reanimated';
 const generateId = () => (Math.floor(Math.random() * 10000) + 1).toString();
 
 const MIN_DATE = new Date(

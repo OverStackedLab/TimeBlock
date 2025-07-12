@@ -1,8 +1,8 @@
+import { useAppDispatch } from '@hooks/useAppDispatch';
+import { Text } from '@rneui/themed';
+import { clearError } from '@store/slices/authSlice';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text } from '@rneui/themed';
-import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { clearError } from '@/store/slices/authSlice';
 
 type ErrorProps = {
   error: string | null;

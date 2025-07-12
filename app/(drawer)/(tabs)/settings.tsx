@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export function SettingsScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Pomodoro</Text>
+      <Text style={styles.title}>Settings</Text>
       <Text style={styles.subtitle}>Coming Soon</Text>
       <Text style={styles.description}>
         Customize your preferences and app experience here.

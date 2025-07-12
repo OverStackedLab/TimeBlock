@@ -1,17 +1,17 @@
+import { useAppDispatch } from '@hooks/useAppDispatch';
+import { useAppSelector } from '@hooks/useAppSelector';
+import { Button, Input, Text } from '@rneui/themed';
+import { signIn } from '@store/slices/authSlice';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import {
-  StyleSheet,
-  View,
   Image,
   KeyboardAvoidingView,
   Platform,
+  StyleSheet,
+  View,
 } from 'react-native';
-import { router } from 'expo-router';
-import { Input, Button, Text } from '@rneui/themed';
-import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { useAppSelector } from '@/hooks/useAppSelector';
-import { useForm, Controller } from 'react-hook-form';
-import { signIn } from '@/store/slices/authSlice';
 import Snackbar from 'react-native-snackbar';
 
 type FormData = {
@@ -53,7 +53,7 @@ const SignInScreen = () => {
       style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
-          source={require('@/assets/images/mytimeblock-logo.png')}
+          source={require('@assets/images/mytimeblock-logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
