@@ -1,4 +1,4 @@
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { makeStyles, useTheme } from '@rneui/themed';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -123,7 +123,7 @@ export default function PomodoroTimer() {
       <Pressable
         style={styles.controlButton}
         onPress={() => setIsRunning(!isRunning)}>
-        <Ionicons
+        <MaterialCommunityIcons
           name={isRunning ? 'pause' : 'play'}
           size={32}
           color={theme.colors.white}
