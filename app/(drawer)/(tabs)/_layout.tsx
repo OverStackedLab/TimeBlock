@@ -65,12 +65,31 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
+          headerShown: true,
+          headerTitle: 'Settings',
+          headerStyle: {
+            backgroundColor: theme.colors.primary,
+            height: 115,
+          },
+          headerTitleStyle: {
+            color: theme.colors.white,
+          },
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{ marginLeft: 5 }}>
+              <MaterialCommunityIcons
+                name="menu"
+                size={24}
+                color={theme.colors.white}
+              />
+            </TouchableOpacity>
+          ),
           tabBarIcon: ({ color }) => {
             return (
               <MaterialCommunityIcons
                 size={28}
-                name="cog-outline"
+                name="timer-outline"
                 color={color}
               />
             );

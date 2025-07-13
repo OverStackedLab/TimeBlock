@@ -3,23 +3,33 @@ import { makeStyles, useTheme } from '@rneui/themed';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
+  Dimensions,
   Easing,
   Pressable,
+  ScrollView,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
-const POMODORO_TIME = 25 * 60; // 25 minutes
-const RADIUS = 100;
-const STROKE_WIDTH = 10;
+const { width } = Dimensions.get('window');
+
+const TIMER_PRESETS = [
+  { name: '5 min', duration: 5 * 60 },
+  { name: '10 min', duration: 10 * 60 },
+  { name: '25 min', duration: 25 * 60 },
+  { name: '30 min', duration: 30 * 60 },
+];
+
+const RADIUS = 130;
+const STROKE_WIDTH = 12;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function PomodoroTimer() {
-  const [secondsLeft, setSecondsLeft] = useState(POMODORO_TIME);
+  const [currentPresetIndex, setCurrentPresetIndex] = useState(2); // Default to 25 min
+  const [secondsLeft, setSecondsLeft] = useState(TIMER_PRESETS[2].duration);
   const [isRunning, setIsRunning] = useState(false);
   const [task, setTask] = useState('Write an article');
   const [editMode, setEditMode] = useState(false);
@@ -27,7 +37,9 @@ export default function PomodoroTimer() {
   const { theme } = useTheme();
   const animatedValue = useRef(new Animated.Value(0)).current;
 
-  const progress = (POMODORO_TIME - secondsLeft) / POMODORO_TIME;
+  const currentPreset = TIMER_PRESETS[currentPresetIndex];
+  const progress =
+    (currentPreset.duration - secondsLeft) / currentPreset.duration;
   const strokeDashoffset = animatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: [CIRCUMFERENCE, 0],
@@ -52,6 +64,11 @@ export default function PomodoroTimer() {
     }).start();
   }, [secondsLeft]);
 
+  useEffect(() => {
+    setSecondsLeft(currentPreset.duration);
+    setIsRunning(false);
+  }, [currentPresetIndex]);
+
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60)
       .toString()
@@ -60,75 +77,92 @@ export default function PomodoroTimer() {
     return `${m}:${s}`;
   };
 
+  const resetTimer = () => {
+    setSecondsLeft(currentPreset.duration);
+    setIsRunning(false);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.taskContainer}>
-        {editMode ? (
-          <TextInput
-            value={task}
-            onChangeText={setTask}
-            onBlur={() => setEditMode(false)}
-            autoFocus
-            style={styles.taskInput}
-          />
-        ) : (
-          <Pressable
-            onPress={() => setEditMode(true)}
-            style={styles.taskDisplay}>
-            <Text style={styles.taskText}>Block: {task}</Text>
-            <MaterialCommunityIcons
-              name="pencil"
-              size={24}
-              color={theme.colors.white}
-            />
-          </Pressable>
-        )}
-      </View>
-
-      <View style={styles.timerWrapper}>
-        <Svg width={220} height={220} viewBox="0 0 220 220">
-          <Circle
-            cx="110"
-            cy="110"
-            r={RADIUS}
-            stroke={theme.colors.grey3}
-            strokeWidth={STROKE_WIDTH}
-            fill="none"
-          />
-          <AnimatedCircle
-            cx="110"
-            cy="110"
-            r={RADIUS}
-            stroke={theme.colors.primary}
-            strokeWidth={STROKE_WIDTH}
-            strokeDasharray={`${CIRCUMFERENCE}, ${CIRCUMFERENCE}`}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round"
-            fill="none"
-            transform="rotate(-90 110 110)"
-          />
-        </Svg>
-        <Text style={styles.timerText}>{formatTime(secondsLeft)}</Text>
-      </View>
-
+      <ScrollView
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onScroll={e => {
+          const index = Math.round(e.nativeEvent.contentOffset.x / width);
+          setCurrentPresetIndex(index);
+        }}
+        style={styles.scrollView}
+        contentContainerStyle={{
+          alignItems: 'flex-end',
+        }}>
+        {TIMER_PRESETS.map((preset, index) => (
+          <View key={index} style={[styles.timerSlide, { width }]}>
+            <View style={styles.timerWrapper}>
+              <Svg width={280} height={280} viewBox="0 0 280 280">
+                <Circle
+                  cx="140"
+                  cy="140"
+                  r={RADIUS}
+                  stroke={theme.colors.grey3}
+                  strokeWidth={STROKE_WIDTH}
+                  fill="none"
+                />
+                <AnimatedCircle
+                  cx="140"
+                  cy="140"
+                  r={RADIUS}
+                  stroke={theme.colors.primary}
+                  strokeWidth={STROKE_WIDTH}
+                  strokeDasharray={`${CIRCUMFERENCE}, ${CIRCUMFERENCE}`}
+                  strokeDashoffset={
+                    index === currentPresetIndex
+                      ? strokeDashoffset
+                      : CIRCUMFERENCE
+                  }
+                  strokeLinecap="round"
+                  fill="none"
+                  transform="rotate(-90 140 140)"
+                />
+              </Svg>
+              <Text style={styles.timerText}>
+                {index === currentPresetIndex
+                  ? formatTime(secondsLeft)
+                  : formatTime(preset.duration)}
+              </Text>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
       <View style={styles.dotsContainer}>
-        {[0, 1, 2, 3].map(i => (
+        {TIMER_PRESETS.map((_, dotIndex) => (
           <View
-            key={i}
-            style={[styles.dot, i === 2 && styles.activeDot]} // hardcoded current round
+            key={dotIndex}
+            style={[
+              styles.dot,
+              dotIndex === currentPresetIndex && styles.activeDot,
+            ]}
           />
         ))}
       </View>
-
-      <Pressable
-        style={styles.controlButton}
-        onPress={() => setIsRunning(!isRunning)}>
-        <MaterialCommunityIcons
-          name={isRunning ? 'pause' : 'play'}
-          size={32}
-          color={theme.colors.white}
-        />
-      </Pressable>
+      <View style={styles.fixedControlsContainer}>
+        <Pressable
+          style={styles.controlButton}
+          onPress={() => setIsRunning(!isRunning)}>
+          <MaterialCommunityIcons
+            name={isRunning ? 'pause' : 'play'}
+            size={32}
+            color={theme.colors.white}
+          />
+        </Pressable>
+        <Pressable style={styles.resetButton} onPress={resetTimer}>
+          <MaterialCommunityIcons
+            name="refresh"
+            size={32}
+            color={theme.colors.white}
+          />
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -136,10 +170,23 @@ export default function PomodoroTimer() {
 const useStyles = makeStyles(theme => ({
   container: {
     flex: 1,
-    paddingTop: 60,
-    paddingHorizontal: 24,
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.colors.background,
+  },
+  scrollView: {
+    flex: 0.5,
+  },
+  timerSlide: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  presetTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: theme.colors.primary,
+    marginBottom: 40,
+    textAlign: 'center',
   },
   header: {
     fontSize: 20,
@@ -177,13 +224,16 @@ const useStyles = makeStyles(theme => ({
   },
   timerText: {
     position: 'absolute',
-    fontSize: 48,
+    fontSize: 56,
     color: theme.colors.primary,
   },
   dotsContainer: {
     flexDirection: 'row',
     gap: 8,
-    marginBottom: 32,
+    marginBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    flex: 0.25,
   },
   dot: {
     width: 10,
@@ -194,13 +244,29 @@ const useStyles = makeStyles(theme => ({
   activeDot: {
     backgroundColor: theme.colors.primary,
   },
+  fixedControlsContainer: {
+    flexDirection: 'row',
+    gap: 20,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingBottom: 60,
+    paddingTop: 20,
+    flex: 0.25,
+  },
   controlButton: {
     backgroundColor: theme.colors.primary,
     padding: 20,
     borderRadius: 999,
-    marginBottom: 40,
     shadowColor: theme.colors.primary,
     shadowOpacity: 0.5,
+    shadowRadius: 10,
+  },
+  resetButton: {
+    backgroundColor: theme.colors.grey4,
+    padding: 20,
+    borderRadius: 999,
+    shadowColor: theme.colors.grey4,
+    shadowOpacity: 0.25,
     shadowRadius: 10,
   },
   bottomNav: {
