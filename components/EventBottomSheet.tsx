@@ -62,7 +62,7 @@ export default function EventBottomSheet({
   const [displayMode, setDisplayMode] =
     useState<IOSNativeProps['display']>('inline');
 
-  const snapPoints = useMemo(() => ['65%' + insets.bottom, '75%', '85%'], []);
+  const snapPoints = useMemo(() => ['65%' + insets.bottom, '75%', '85%'], [insets.bottom]);
 
   useEffect(() => {
     if (event) {
