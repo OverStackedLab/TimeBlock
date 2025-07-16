@@ -1,6 +1,7 @@
 # TimeBlock 📅⏰
 
-A modern and intuitive time-blocking calendar application built with React Native and Expo. 
+<!-- Test comment for dummy PR verification -->
+A modern and intuitive time-blocking calendar application built with React Native and Expo.
 TimeBlock helps you organize your schedule by creating visual time blocks for your events and tasks, 
 making time management more effective and visual.
 
