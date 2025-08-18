@@ -62,12 +62,13 @@ export default function CustomDrawerContent(
                 dispatch(setNumberOfDays(option));
                 props.navigation.dispatch(DrawerActions.closeDrawer());
               }}
-              containerStyle={{
-                backgroundColor:
-                  numberOfDays === option
-                    ? theme.colors.primary
-                    : 'transparent',
-              }}>
+              // containerStyle={{
+              //   backgroundColor:
+              //     numberOfDays === option
+              //       ? theme.colors.primary
+              //       : 'transparent',
+              // }}
+            >
               <Icon
                 name={icon}
                 type="material-community"
@@ -91,7 +92,7 @@ export default function CustomDrawerContent(
           <Avatar
             rounded
             title={user?.email?.slice(0, 1).toUpperCase()}
-            containerStyle={{ backgroundColor: theme.colors.grey5 }}
+            // containerStyle={{ backgroundColor: theme.colors.grey5 }}
           />
           <Text style={styles.userName}>{user?.email}</Text>
         </View>

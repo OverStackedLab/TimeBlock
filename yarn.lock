@@ -7170,10 +7170,22 @@ react-native-helmet-async@2.0.4:
     react-fast-compare "^3.2.2"
     shallowequal "^1.1.0"
 
-react-native-is-edge-to-edge@^1.1.6:
+react-native-is-edge-to-edge@^1.1.6, react-native-is-edge-to-edge@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.2.1.tgz#64e10851abd9d176cbf2b40562f751622bde3358"
   integrity sha512-FLbPWl/MyYQWz+KwqOZsSyj2JmLKglHatd3xLZWskXOpRaio4LfEDEz8E/A6uD8QoTHW6Aobw1jbEwK7KMgR7Q==
+
+react-native-keyboard-controller@^1.18.5:
+  version "1.18.5"
+  resolved "https://registry.yarnpkg.com/react-native-keyboard-controller/-/react-native-keyboard-controller-1.18.5.tgz#ae12131f2019c574178479d2c55784f55e08bb68"
+  integrity sha512-wbYN6Tcu3G5a05dhRYBgjgd74KqoYWuUmroLpigRg9cXy5uYo7prTMIvMgvLtARQtUF7BOtFggUnzgoBOgk0TQ==
+  dependencies:
+    react-native-is-edge-to-edge "^1.2.1"
+
+react-native-mmkv@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-3.3.0.tgz#a0816babdf68afd2bfd881a48e28c8815795286b"
+  integrity sha512-2iPjIJ+IAODXN35wm53EN6nv+hR/0NXLLiLWOdPA/0gXDB2dYVrr6MqvoiFpxhLhdj0B8fkf5ARNVavJaSvuuQ==
 
 react-native-paper@^5.13.1:
   version "5.14.5"

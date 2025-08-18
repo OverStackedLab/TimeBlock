@@ -46,9 +46,7 @@ export default function EventBottomSheet({
   );
   const [eventStartTime, setEventStartTime] = useState(event?.start?.dateTime);
   const [eventEndTime, setEventEndTime] = useState(event?.end.dateTime);
-  const [eventColor, setEventColor] = useState(
-    event?.color || theme.colors.primary,
-  );
+  const [eventColor, setEventColor] = useState(event?.color);
   const [eventDescription, setEventDescription] = useState(
     event?.description || '',
   );
@@ -71,7 +69,7 @@ export default function EventBottomSheet({
       );
       setEventStartTime(event.start.dateTime);
       setEventEndTime(event.end.dateTime);
-      setEventColor(event.color || theme.colors.primary);
+      setEventColor(event.color);
       setEventDescription(event.description || '');
     }
   }, [event]);
@@ -230,7 +228,7 @@ export default function EventBottomSheet({
             </Button>
             <Button
               type="clear"
-              titleStyle={{ color: theme.colors.error }}
+              // titleStyle={{ color: theme.colors.error }}
               onPress={handleDeleteEvent}>
               Delete
             </Button>

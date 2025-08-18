@@ -1,42 +1,13 @@
-import { createTheme } from '@rneui/themed';
+import { colors as colorsLight } from './colors';
+import { colors as colorsDark } from './colorsDark';
+import type { Theme } from './types';
 
-const tintColorLight = '#f57c00';
-const tintColorDark = '#fff';
-
-export const theme = createTheme({
-  lightColors: {
-    primary: '#f57c00',
-    secondary: '#757575',
-    background: '#ffffff',
-    white: '#ffffff',
-    black: '#000000',
-    grey0: '#f9fafb',
-    grey1: '#f3f4f6',
-    grey2: '#e5e7eb',
-    grey3: '#d1d5db',
-    grey4: '#9ca3af',
-    grey5: '#6b7280',
-    success: '#22c55e',
-    warning: '#f59e0b',
-    error: '#ef4444',
-    tint: tintColorLight,
-  },
-  darkColors: {
-    primary: '#f57c00',
-    secondary: '#f57c00',
-    background: '#111827',
-    white: '#ffffff',
-    black: '#000000',
-    grey0: '#18181b',
-    grey1: '#27272a',
-    grey2: '#3f3f46',
-    grey3: '#52525b',
-    grey4: '#71717a',
-    grey5: '#a1a1aa',
-    success: '#22c55e',
-    warning: '#f59e0b',
-    error: '#ef4444',
-    tint: tintColorDark,
-  },
-  mode: 'dark',
-});
+// Here we define our themes.
+export const lightTheme: Theme = {
+  colors: colorsLight,
+  isDark: false,
+};
+export const darkTheme: Theme = {
+  colors: colorsDark,
+  isDark: true,
+};

@@ -1,17 +1,23 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { useColorScheme } from '@hooks/useColorScheme';
-import { useTheme } from '@rneui/themed';
+import { useAppTheme } from '@theme/context';
+import { ThemedStyle } from '@theme/types';
 import { router, Tabs } from 'expo-router';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, ViewStyle } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const { theme } = useTheme();
+  const { bottom } = useSafeAreaInsets();
+  const {
+    themed,
+    theme: { colors },
+  } = useAppTheme();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: theme.colors.tint,
+        tabBarActiveTintColor: colors.tint,
+        tabBarStyle: themed([$tabBar, { height: bottom + 70 }]),
       }}>
       <Tabs.Screen
         name="index"
@@ -34,11 +40,11 @@ export default function TabLayout() {
           headerShown: true,
           headerTitle: 'Un Pomodoro',
           headerStyle: {
-            backgroundColor: theme.colors.primary,
-            height: 115,
+            // backgroundColor: theme.colors.primary,
+            // height: 115,
           },
           headerTitleStyle: {
-            color: theme.colors.white,
+            // color: theme.colors.white,
           },
           headerLeft: () => (
             <TouchableOpacity
@@ -47,7 +53,7 @@ export default function TabLayout() {
               <MaterialCommunityIcons
                 name="menu"
                 size={24}
-                color={theme.colors.white}
+                // color={theme.colors.white}
               />
             </TouchableOpacity>
           ),
@@ -68,11 +74,11 @@ export default function TabLayout() {
           headerShown: true,
           headerTitle: 'Settings',
           headerStyle: {
-            backgroundColor: theme.colors.primary,
-            height: 115,
+            // backgroundColor: theme.colors.primary,
+            // height: 115,
           },
           headerTitleStyle: {
-            color: theme.colors.white,
+            // color: theme.colors.white,
           },
           headerLeft: () => (
             <TouchableOpacity
@@ -81,7 +87,7 @@ export default function TabLayout() {
               <MaterialCommunityIcons
                 name="menu"
                 size={24}
-                color={theme.colors.white}
+                // color={theme.colors.white}
               />
             </TouchableOpacity>
           ),
@@ -99,3 +105,8 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const $tabBar: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  backgroundColor: colors.background,
+  borderTopColor: colors.transparent,
+});

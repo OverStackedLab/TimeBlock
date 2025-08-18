@@ -87,7 +87,7 @@ export default function Calendar() {
       ...event,
       id: generateId(),
       title: 'New Block',
-      color: theme.colors.primary,
+      // color: theme.colors.primary,
       extendedProps: {
         description: '',
       },
@@ -107,23 +107,20 @@ export default function Calendar() {
     setSelectedEvent(event);
   }, []);
 
-  const _onDragSelectedEventEnd = useCallback(
-    (event: SelectedEventType) => {
-      if (event.id) {
-        const updatedEvent: EventItem = {
-          ...event,
-          id: event.id,
-          title: event.title || 'New Block',
-          start: event.start,
-          end: event.end,
-          color: event.color || theme.colors.primary,
-        };
-        dispatch(updateEvent(updatedEvent));
-        setSelectedEvent(undefined);
-      }
-    },
-    [theme.colors.primary],
-  );
+  const _onDragSelectedEventEnd = useCallback((event: SelectedEventType) => {
+    if (event.id) {
+      const updatedEvent: EventItem = {
+        ...event,
+        id: event.id,
+        title: event.title || 'New Block',
+        start: event.start,
+        end: event.end,
+        color: event.color,
+      };
+      dispatch(updateEvent(updatedEvent));
+      setSelectedEvent(undefined);
+    }
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>

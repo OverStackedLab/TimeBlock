@@ -104,7 +104,7 @@ export default function PomodoroTimer() {
                   cx="140"
                   cy="140"
                   r={RADIUS}
-                  stroke={theme.colors.grey3}
+                  // stroke={theme.colors.grey3}
                   strokeWidth={STROKE_WIDTH}
                   fill="none"
                 />
@@ -112,7 +112,7 @@ export default function PomodoroTimer() {
                   cx="140"
                   cy="140"
                   r={RADIUS}
-                  stroke={theme.colors.primary}
+                  // stroke={theme.colors.primary}
                   strokeWidth={STROKE_WIDTH}
                   strokeDasharray={`${CIRCUMFERENCE}, ${CIRCUMFERENCE}`}
                   strokeDashoffset={
@@ -152,14 +152,14 @@ export default function PomodoroTimer() {
           <MaterialCommunityIcons
             name={isRunning ? 'pause' : 'play'}
             size={32}
-            color={theme.colors.white}
+            // color={theme.colors.white}
           />
         </Pressable>
         <Pressable style={styles.resetButton} onPress={resetTimer}>
           <MaterialCommunityIcons
             name="refresh"
             size={32}
-            color={theme.colors.white}
+            // color={theme.colors.white}
           />
         </Pressable>
       </View>
@@ -172,7 +172,7 @@ const useStyles = makeStyles(theme => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.background,
+    // backgroundColor: theme.colors.background,
   },
   scrollView: {
     flex: 0.5,
@@ -184,14 +184,14 @@ const useStyles = makeStyles(theme => ({
   presetTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: theme.colors.primary,
+    // color: theme.colors.primary,
     marginBottom: 40,
     textAlign: 'center',
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: theme.colors.primary,
+    // color: theme.colors.primary,
     marginBottom: 20,
   },
   taskContainer: {
@@ -199,7 +199,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: 80,
   },
   taskDisplay: {
-    backgroundColor: theme.colors.primary,
+    // backgroundColor: theme.colors.primary,
     borderRadius: 30,
     padding: 12,
     flexDirection: 'row',
@@ -207,14 +207,14 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
   },
   taskText: {
-    color: theme.colors.white,
+    // color: theme.colors.white,
     fontSize: 16,
   },
   taskInput: {
-    backgroundColor: theme.colors.primary,
+    // backgroundColor: theme.colors.primary,
     borderRadius: 30,
     padding: 12,
-    color: theme.colors.white,
+    // color: theme.colors.white,
     fontSize: 16,
   },
   timerWrapper: {
@@ -225,7 +225,7 @@ const useStyles = makeStyles(theme => ({
   timerText: {
     position: 'absolute',
     fontSize: 56,
-    color: theme.colors.primary,
+    // color: theme.colors.primary,
   },
   dotsContainer: {
     flexDirection: 'row',
@@ -239,10 +239,10 @@ const useStyles = makeStyles(theme => ({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: theme.colors.grey3,
+    // backgroundColor: theme.colors.grey3,
   },
   activeDot: {
-    backgroundColor: theme.colors.primary,
+    // backgroundColor: theme.colors.primary,
   },
   fixedControlsContainer: {
     flexDirection: 'row',
@@ -254,18 +254,18 @@ const useStyles = makeStyles(theme => ({
     flex: 0.25,
   },
   controlButton: {
-    backgroundColor: theme.colors.primary,
+    // backgroundColor: theme.colors.primary,
     padding: 20,
     borderRadius: 999,
-    shadowColor: theme.colors.primary,
+    // shadowColor: theme.colors.primary,
     shadowOpacity: 0.5,
     shadowRadius: 10,
   },
   resetButton: {
-    backgroundColor: theme.colors.grey4,
+    // backgroundColor: theme.colors.grey4,
     padding: 20,
     borderRadius: 999,
-    shadowColor: theme.colors.grey4,
+    // shadowColor: theme.colors.grey4,
     shadowOpacity: 0.25,
     shadowRadius: 10,
   },

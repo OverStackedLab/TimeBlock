@@ -1,21 +1,17 @@
 import auth from '@react-native-firebase/auth';
-import { ThemeProvider } from '@rneui/themed';
 import { persistor, store } from '@store';
 import { setUser } from '@store/slices/authSlice';
-import { theme } from '@theme';
+import { ThemeProvider } from '@theme/context';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import 'react-native-reanimated';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -28,8 +24,6 @@ function LoadingScreen() {
 }
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  theme.mode = colorScheme === 'dark' ? 'dark' : 'light';
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -61,11 +55,13 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <PersistGate loading={<LoadingScreen />} persistor={persistor}>
-        <ThemeProvider useDarkMode={colorScheme === 'dark'} theme={theme}>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-          </Stack>
+        <ThemeProvider>
+          <KeyboardProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+            </Stack>
+          </KeyboardProvider>
         </ThemeProvider>
       </PersistGate>
     </Provider>

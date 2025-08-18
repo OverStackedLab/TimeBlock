@@ -5,13 +5,8 @@ import { signIn } from '@store/slices/authSlice';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import Snackbar from 'react-native-snackbar';
 
 type FormData = {
@@ -48,108 +43,110 @@ const SignInScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('@assets/images/mytimeblock-logo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-      </View>
-      {error && <Text style={styles.error}>Sign in failed</Text>}
-      <View style={styles.formContainer}>
-        <Controller
-          control={control}
-          rules={{
-            required: 'Email is required',
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: 'Invalid email address',
-            },
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Email"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="email-address"
-              disabled={loading}
-              errorMessage={errors.email?.message}
-              leftIcon={{ type: 'material', name: 'email' }}
-              containerStyle={styles.inputContainer}
-            />
-          )}
-          name="email"
-        />
+    <View style={styles.container}>
+      <KeyboardAwareScrollView
+        bottomOffset={62}
+        contentContainerStyle={{ gap: 16, flex: 1, backgroundColor: '#fff' }}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('@assets/images/mytimeblock-logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </View>
+        {error && <Text style={styles.error}>Sign in failed</Text>}
+        <View style={styles.formContainer}>
+          <Controller
+            control={control}
+            rules={{
+              required: 'Email is required',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'Invalid email address',
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                placeholder="Email"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+                disabled={loading}
+                errorMessage={errors.email?.message}
+                leftIcon={{ type: 'material', name: 'email' }}
+                containerStyle={styles.inputContainer}
+              />
+            )}
+            name="email"
+          />
 
-        <Controller
-          control={control}
-          rules={{
-            required: 'Password is required',
-            minLength: {
-              value: 6,
-              message: 'Password must be at least 6 characters',
-            },
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Password"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              secureTextEntry={!showPassword}
-              disabled={loading}
-              errorMessage={errors.password?.message}
-              leftIcon={{ type: 'material', name: 'lock' }}
-              rightIcon={{
-                type: 'material',
-                name: showPassword ? 'visibility' : 'visibility-off',
-                onPress: () => setShowPassword(!showPassword),
-              }}
-              containerStyle={styles.inputContainer}
-            />
-          )}
-          name="password"
-        />
+          <Controller
+            control={control}
+            rules={{
+              required: 'Password is required',
+              minLength: {
+                value: 6,
+                message: 'Password must be at least 6 characters',
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                placeholder="Password"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                secureTextEntry={!showPassword}
+                disabled={loading}
+                errorMessage={errors.password?.message}
+                leftIcon={{ type: 'material', name: 'lock' }}
+                rightIcon={{
+                  type: 'material',
+                  name: showPassword ? 'visibility' : 'visibility-off',
+                  onPress: () => setShowPassword(!showPassword),
+                }}
+                containerStyle={styles.inputContainer}
+              />
+            )}
+            name="password"
+          />
 
-        <Button
-          title="Sign In"
-          onPress={handleSubmit(onSubmit)}
-          loading={loading}
-          disabled={loading}
-          buttonStyle={[styles.button]}
-          containerStyle={styles.buttonContainer}
-        />
+          <Button
+            title="Sign In"
+            onPress={handleSubmit(onSubmit)}
+            loading={loading}
+            disabled={loading}
+            buttonStyle={[styles.button]}
+            containerStyle={styles.buttonContainer}
+          />
 
-        <Button
-          title="Don't have an account? Sign Up"
-          type="clear"
-          size="sm"
-          onPress={() => router.push('/(auth)/sign-up')}
-          disabled={loading}
-          containerStyle={styles.buttonContainer}
-        />
+          <Button
+            title="Don't have an account? Sign Up"
+            type="clear"
+            size="sm"
+            onPress={() => router.push('/(auth)/sign-up')}
+            disabled={loading}
+            containerStyle={styles.buttonContainer}
+          />
 
-        <Button
-          title="Forgot Password?"
-          type="clear"
-          size="sm"
-          onPress={() => router.push('/(auth)/forgot-password')}
-          disabled={loading}
-          containerStyle={styles.buttonContainer}
-        />
-      </View>
+          <Button
+            title="Forgot Password?"
+            type="clear"
+            size="sm"
+            onPress={() => router.push('/(auth)/forgot-password')}
+            disabled={loading}
+            containerStyle={styles.buttonContainer}
+          />
+        </View>
+      </KeyboardAwareScrollView>
       <View style={styles.footer}>
         <Text>
           Powered by <Text style={styles.bold}>OverStacked</Text>
         </Text>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
@@ -172,6 +169,7 @@ const styles = StyleSheet.create({
   logo: {
     width: '90%',
     height: 60,
+    backgroundColor: '#fff',
   },
   inputContainer: {
     paddingHorizontal: 0,

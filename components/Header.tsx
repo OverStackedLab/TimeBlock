@@ -49,7 +49,7 @@ const Header = ({ currentDate, onPressToday }: HeaderProps) => {
         styles.header,
         {
           paddingTop: safeTop + 16,
-          backgroundColor: theme.colors.primary,
+          // backgroundColor: theme.colors.primary,
         },
       ]}>
       <StatusBar style="light" />
@@ -60,13 +60,11 @@ const Header = ({ currentDate, onPressToday }: HeaderProps) => {
         <MaterialCommunityIcons
           name="menu"
           size={24}
-          color={theme.colors.white}
+          // color={theme.colors.white}
         />
       </TouchableOpacity>
       <View style={styles.headerRightContent}>
-        <Text style={[styles.headerTitle, { color: theme.colors.white }]}>
-          {title}
-        </Text>
+        <Text style={[styles.headerTitle]}>{title}</Text>
         <TouchableOpacity
           hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
           activeOpacity={0.6}
@@ -74,7 +72,7 @@ const Header = ({ currentDate, onPressToday }: HeaderProps) => {
           <MaterialCommunityIcons
             name="calendar"
             size={24}
-            color={theme.colors.white}
+            // color={theme.colors.white}
           />
         </TouchableOpacity>
       </View>
